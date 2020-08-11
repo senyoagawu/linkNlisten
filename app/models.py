@@ -1,9 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from sqlalchemy.sql import func
 
 db = SQLAlchemy()
-# i'll think about updated_at later, probs don't ever need it.
+# # i'll think about updated_at later, probs don't ever need it.
 
 
 class MixinAsDict:
@@ -15,10 +15,10 @@ class Chat(MixinAsDict, db.Model):
     __table__ = 'chats'
 
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Colummn(db.Integer, db.ForeignKey('user.id'), nullable=false)
-    recipient_id = db.Colummn(db.Integer, db.ForeignKey('user.id'), nullable=false)
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     author = db.relationship('User', backref='chats')
     recipient = db.relationship('User', backref='chats')
@@ -32,8 +32,8 @@ class Comment(MixinAsDict, db.Model):
     body = db.Column(db.String(), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)  # posts, images, other media 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     post = db.relationship('Post', backref='comments')
     author = db.relationship('User', backref='comments')
@@ -45,8 +45,29 @@ friendship = db.Table(
     db.Column('requester_id', db.Integer, db.ForeignKey('users.id')),
     db.Column('accepter_id', db.Integer, db.ForeignKey('users.id')),
     db.Column('status_accepted', db.Boolean, defaut=False, nullable=False),
-    db.Column('created_at', DateTime(timezone=True), default=func.now(), nullable=False)
+    db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
 )
+
+
+interest_user = db.Table(
+    'interests_users',
+    db.Model.metadata,
+    db.Column('users_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('interests_id', db.Integer, db.ForeignKey('interest.id')),
+    db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
+)
+
+
+class Interest(MixinAsDict, db.Model):
+    # channels
+    __tablename__ = 'interests'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+    users = db.relationship('User', backref='interests')
 
 
 class Like(MixinAsDict, db.Model):
@@ -59,8 +80,8 @@ class Like(MixinAsDict, db.Model):
     comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
     like_on = db.Column(db.Integer, nullable=False)  # post(1), comments(2) etc...
     like_type = db.Column(db.Integer, nullable=False)  # like(1), hate(2), love etc...
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     author = db.relationship('User', backref='likes')
     post = db.relationship('User', backref='like') #is this a weird one way 1-many!
@@ -78,8 +99,8 @@ class Like(MixinAsDict, db.Model):
 #     comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
 #     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 #     type = db.Column(db.Integer, nullable=False)  #like, hate, love etc...
-#     created_at = db.Column(DateTime(timezone=True), nullable=False)
-#     updated_at = db.Column(DateTime(timezone=True), nullable=False)
+#     created_at = db.Column(db.DateTime(timezone=True), nullable=False)
+#     updated_at = db.Column(db.DateTime(timezone=True), nullable=False)
 
 
 class Message(MixinAsDict, db.Model):
@@ -91,8 +112,8 @@ class Message(MixinAsDict, db.Model):
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # maybe unnecessary
     # without it we would have secondary relationship. might be annoyting to send recipient_id along from front end
     author_id = db.Column(db.Text, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     chat = db.relationship('Chat', backref='messages')
     author = db.relationship('User', back_populate='messages')
@@ -110,8 +131,8 @@ class Post(MixinAsDict, db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     wall_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     body = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     # comments = db.relationship('Comment', backref='post')
     author = db.relationship('User', backref='posts')
@@ -147,24 +168,3 @@ class User(MixinAsDict, db.Model):
     
     def is_valid_email(self, email):
         return not re.match("[^@]+@[^@]+\.[^@]+", email)
-
-
-interest_user = db.Table(
-    'interests_users',
-    db.Model.metadata,
-    db.Column('users_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('interests_id', db.Integer, db.ForeignKey('interest.id')),
-    db.Column('created_at', DateTime(timezone=True), default=func.now(), nullable=False)
-)
-
-
-class Interest(MixinAsDict, db.Model):
-    # channels
-    __tablename__ = 'interests'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), nullable=False)
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
-    users = db.relationship('User', backref='interests')

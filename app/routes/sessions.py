@@ -9,7 +9,7 @@ import jwt
 from ..config import Configuration
 # from ..auth import require_auth
 
-bp = Blueprint("session", __name__, url_prefix='/api/session')
+bp = Blueprint("sessions", __name__, url_prefix='/api/sessions')
 
     
 @bp.route('/', methods=["POST"], strict_slashes=False)  # signin/start new session 
@@ -31,7 +31,7 @@ def login():
 def signup():
     data = request.json
     print(f"\n\n\nDATA\n{data}\n\n\n")
-    user = User(password=data['password'], email=data['email'], name=data['name'])
+    user = User(password=data['password'], email=data['email'], first_name=data['first_name'], last_name=data['last_name'])
     db.session.add(user)
     db.session.commit()
 
