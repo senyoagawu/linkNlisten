@@ -92,6 +92,7 @@ class Post(MixinAsDict, db.Model):
     # recipient = db.relationship('User')
 
 
+
 class User(MixinAsDict, db.Model):
     __tablename__ = 'users'
 
