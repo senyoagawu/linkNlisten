@@ -7,12 +7,12 @@ from app.models import db, User
 from flask import Response
 import jwt  
 from ..config import Configuration
-# from ..auth import require_auth
+from ..auth import require_auth
 
 bp = Blueprint("sessions", __name__, url_prefix='/api/sessions')
 
-    
-@bp.route('/', methods=["POST"], strict_slashes=False)  # signin/start new session 
+# login an existing user. generate jwt
+@bp.route('/', methods=["POST"], strict_slashes=False)  
 # @cross_origin()
 def login():
     data = request.json
@@ -22,10 +22,12 @@ def login():
     print(data['password'], user.password, generate_password_hash(data['password']))
     if user.check_password(data['password']):
         access_token = jwt.encode({'email': user.email}, Configuration.SECRET_KEY)
-        return {'access_token': access_token.decode('UTF-8'), 'user': user.as_dict()}
+        #TODO reduce to return necessary user info
+        return {'access_token': access_token.decode('UTF-8'), 'user': user.as_dict()}  
     else:
         return {"error": "Incorrect password"}, 401
 
+# create new account
 @bp.route('/signup', methods=["POST"]) # create new account
 # @cross_origin()
 def signup():
@@ -38,8 +40,9 @@ def signup():
     access_token = jwt.encode({'email': user.email}, Configuration.SECRET_KEY)
     return {'access_token': access_token.decode('UTF-8'), 'user': user.as_dict()}
 
-@bp.route('', methods=["DELETE"])
+# logout/delete session.
+@bp.route('/', methods=["DELETE"]) # is this really a delete method?
+@require_auth
 def logout():
     access_token = jwt.encode({'email': ''}, Configuration.SECRET_KEY)
     return {'access_token': access_token.decode('UTF-8'), 'user': ''}
-    

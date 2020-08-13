@@ -3,7 +3,7 @@ from functools import wraps
 import jwt
 
 from app.config import Configuration
-from app.models.users import User
+from app.models import User
 
 def require_auth(func):
   @wraps(func)
