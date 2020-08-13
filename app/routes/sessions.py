@@ -33,7 +33,7 @@ def login():
 def signup():
     data = request.json
     print(f"\n\n\nDATA\n{data}\n\n\n")
-    user = User(password=data['password'], email=data['email'], first_name=data['first_name'], last_name=data['last_name'])
+    user = User(password=data['password'], email=data['email'], first_name=data['first_name'])
     db.session.add(user)
     db.session.commit()
 

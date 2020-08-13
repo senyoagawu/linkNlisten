@@ -15,8 +15,8 @@ class Chat(MixinAsDict, db.Model):
     __tablename__ = 'chats'
 
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
@@ -29,8 +29,8 @@ class Post(MixinAsDict, db.Model):
     __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    wall_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    walls_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     body = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
@@ -101,15 +101,15 @@ class Message(MixinAsDict, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text, nullable=False)
     chats_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
-    recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # maybe unnecessary
+    recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # maybe unnecessary
     # without it we would have secondary relationship. might be annoyting to send recipient_id along from front end
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     chat = db.relationship('Chat', backref='messages')
-    author = db.relationship('User', back_populates='messages')
-    recipient = db.relationship('User', secondary='chats', backref='messages')
+    author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
+    recipient = db.relationship('User',back_populates='messages', foreign_keys=[recipients_id])
 
     @classmethod
     def find_by_email(cls, email):
@@ -121,8 +121,8 @@ class Comment(MixinAsDict, db.Model):
      
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)  # posts, images, other media 
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)  # posts, images, other media 
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
@@ -149,7 +149,7 @@ class Like(MixinAsDict, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     # type_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id')) #? does user_id make more sense:?
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id')) #? does user_id make more sense:?
     posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     comments_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
     reference = db.Column(db.String(15), nullable=False)  # ['post', 'comments',...]
