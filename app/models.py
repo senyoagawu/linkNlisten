@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 
 class MixinAsDict:
-    def as_dict(self, skip=[]):
+    def as_dict(self, skip=['hashed_password','id']):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in skip}
 
 
@@ -52,7 +52,6 @@ class User(MixinAsDict, db.Model):
     hashed_password = db.Column(db.String(128), nullable=False)
     bio = db.Column(db.Text)
     profile_pic = db.Column(db.String, default="https://i.imgur.com/kfQKjwm.png")
-    title = db.Column(db.String)
     location = db.Column(db.String)
 
     def name(self):
@@ -71,6 +70,10 @@ class User(MixinAsDict, db.Model):
     
     def is_valid_email(self, email):
         return not re.match("[^@]+@[^@]+\.[^@]+", email)
+     
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter(cls.email == email).one()
 
     chats = db.relationship('Chat', backref='user', foreign_keys='[Chat.authors_id]')
     messages = db.relationship('Message', backref='user', foreign_keys='[Message.authors_id]')
@@ -111,9 +114,7 @@ class Message(MixinAsDict, db.Model):
     author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
     recipient = db.relationship('User',back_populates='messages', foreign_keys=[recipients_id])
 
-    @classmethod
-    def find_by_email(cls, email):
-        return cls.query.filter(cls.email == email).one()
+   
 
 
 class Comment(MixinAsDict, db.Model):
@@ -128,8 +129,6 @@ class Comment(MixinAsDict, db.Model):
 
     post = db.relationship('Post', backref='comments')
     author = db.relationship('User', backref='comments')
-
-
 
 
 class Interest(MixinAsDict, db.Model):
@@ -160,3 +159,4 @@ class Like(MixinAsDict, db.Model):
     author = db.relationship('User', backref='likes')
     post = db.relationship('User', backref='like')  #? is this a weird one way 1-many!
     comment = db.relationship('Comment', backref='like')
+

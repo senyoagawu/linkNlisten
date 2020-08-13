@@ -16,8 +16,6 @@ bp = Blueprint("sessions", __name__, url_prefix='/api/sessions')
 # @cross_origin()
 def login():
     data = request.json
-    # em = data.email
-    print('=====', data)
     user = User.query.filter(User.email == data['email']).first() #? email or Username for login
     if not user:
         return {"error": "Email not found"}, 422
