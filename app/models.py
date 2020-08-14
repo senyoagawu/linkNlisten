@@ -139,7 +139,7 @@ class Interest(MixinAsDict, db.Model):
     name = db.Column(db.String(60), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
+    # author_id = db.Column(db.Integer)
     users = db.relationship('User', secondary=interest_user, backref='interests')
 
 

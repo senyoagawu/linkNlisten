@@ -1,22 +1,21 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, User
-# from ..auth import require_auth_jobseeker, require_auth_company
 
 bp = Blueprint("users", __name__, url_prefix='/api/users')
 
-@bp.route('/')  # fetch all jobseekers
+@bp.route('/')  # fetch all users
 def fetch_users():
     users = [u.as_dict() for u in User.query.all()]
     return {'users': users}
 
-@bp.route('/<string:email>')  # fetch a single jobseeker
+@bp.route('/<string:email>')  # fetch a single user
 def fetch_user(email):
     # db.session(User, )
     user = User.find_by_email(email).as_dict()
     return {'user': user}
 
  
-@bp.route('<string:email>', methods=['PUT'])  # fetch a single jobseeker
+@bp.route('<string:email>', methods=['PUT'])  # edit a single user
 def edit_user(email):
     data = request.json
     user = User.find_by_email(email)
