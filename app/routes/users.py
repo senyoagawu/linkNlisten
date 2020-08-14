@@ -11,6 +11,7 @@ def fetch_users():
 
 @bp.route('/<string:email>')  # fetch a single jobseeker
 def fetch_user(email):
+    # db.session(User, )
     user = User.find_by_email(email).as_dict()
     return {'user': user}
 
@@ -18,7 +19,6 @@ def fetch_user(email):
 @bp.route('<string:email>', methods=['PUT'])  # fetch a single jobseeker
 def edit_user(email):
     data = request.json
-    print('=====', data)
     user = User.find_by_email(email)
     try:
         user.first_name = data['first_name'],

@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin
 
 from app.config import Configuration
-from app.routes import sessions, users
+from app.routes import sessions, users, interests
 from app.models import db
 
 app = Flask(__name__)
@@ -15,4 +15,5 @@ migrate = Migrate(app, db)
 
 app.register_blueprint(sessions.bp)
 app.register_blueprint(users.bp)
+app.register_blueprint(interests.bp)
 
