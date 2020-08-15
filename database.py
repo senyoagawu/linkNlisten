@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from faker import Faker
 from random import choices, seed
 from app import app, db
-from app.models import Chat, User, friendship, interest_user, Message, Interest, Like
+from app.models import Chat, User, friendship, InterestUser, Message, Interest, Like
 
 load_dotenv()
 fake = Faker()

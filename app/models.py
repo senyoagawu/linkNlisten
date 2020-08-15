@@ -75,9 +75,12 @@ class User(MixinAsDict, db.Model):
     def find_by_email(cls, email):
         return cls.query.filter(cls.email == email).one()
 
+    interests = db.relationship('Interest', secondary='interests_users')
     chats = db.relationship('Chat', backref='user', foreign_keys='[Chat.authors_id]')
-    messages = db.relationship('Message', backref='user', foreign_keys='[Message.authors_id]')
-
+    # messages = db.relationship('Message', backref='user', foreign_keys='[Message.authors_id]')
+    # messages = db.relationship('User', back_populates='author', foreign_keys="[Message.authors_id]")
+    messages = db.relationship('Message', back_populates='author',foreign_keys="[Message.authors_id]")
+    # messages_r = db.relationship('User',back_populates='recipient', foreign_keys="[Message.recipients_id]")
 
 friendship = db.Table(
     'friendships',
@@ -89,13 +92,26 @@ friendship = db.Table(
 )
 
 
-interest_user = db.Table(
-    'interests_users',
-    db.Model.metadata,
-    db.Column('users_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('interests_id', db.Integer, db.ForeignKey('interests.id')),
-    db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
-)
+# interest_user = db.Table(
+#     'interests_users',
+#     db.Model.metadata,
+#     db.Column('users_id', db.Integer, db.ForeignKey('users.id')),
+#     db.Column('interests_id', db.Integer, db.ForeignKey('interests.id')),
+#     db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
+# )
+
+
+class InterestUser(MixinAsDict, db.Model):
+    __tablename__ = 'interests_users'
+    id = db.Column(db.Integer, primary_key=True)
+    users_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    interests_id = db.Column(db.Integer, db.ForeignKey('interests.id'), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+    # users = db.relationship('User', backref='interestuser', foreign_keys=[users_id])
+    # interests = db.relationship('Interest', backref='interestuser',foreign_keys=[interests_id])
+
 
 
 class Message(MixinAsDict, db.Model):
@@ -112,8 +128,9 @@ class Message(MixinAsDict, db.Model):
 
     chat = db.relationship('Chat', backref='messages')
     author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
-    recipient = db.relationship('User',back_populates='messages', foreign_keys=[recipients_id])
+    # recipient = db.relationship('User', foreign_keys=[recipients_id])
 
+    
    
 
 
@@ -140,7 +157,7 @@ class Interest(MixinAsDict, db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
     # author_id = db.Column(db.Integer)
-    users = db.relationship('User', secondary=interest_user, backref='interests')
+    # users = db.relationship('User', secondary='InterestUser', backref='interests')
 
 
 class Like(MixinAsDict, db.Model):
