@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from faker import Faker
 from random import choices, seed
 from app import app, db
-from app.models import Chat, User, friendship, InterestUser, Message, Interest, Like
+from app.models import User, InterestUser, Interest, Post
 
 load_dotenv()
 fake = Faker()
@@ -23,12 +23,17 @@ with app.app_context():
         db.session.commit()
         
     for i in range(50):
-            u = User(
-                first_name=fake.first_name(),
-                last_name=fake.last_name(),
-                email=fake.email(),
-                password='password',
-                )
-            db.session.add(u)
-            db.session.commit()
-
+        u = User(
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            email=fake.email(),
+            password='password',
+            )
+        db.session.add(u)
+        db.session.commit()
+        db.session.add(InterestUser(users_id=u.id, interests_id=1+ i % 33, created_at='now', updated_at='now'))
+        db.session.commit()
+        for interest in interests:
+            for i in range(5):
+                db.session.add(Post(authors_id=u.id, body=fake.text(), created_at='now', updated_at='now'))
+                db.session.commit()

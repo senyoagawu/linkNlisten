@@ -14,6 +14,12 @@ def fetch_user(email):
     user = User.find_by_email(email).as_dict()
     return {'user': user}
 
+@bp.route('/<string:email>')  # fetch friends of a single user
+def fetch_users_friends(email):
+    # db.session(User, )
+    user = [f.as_dict() for f in User.find_by_email(email).one().friends]
+    return {'user': user}
+
  
 @bp.route('<string:email>', methods=['PUT'])  # edit a single user
 def edit_user(email):

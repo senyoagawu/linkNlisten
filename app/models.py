@@ -7,39 +7,8 @@ db = SQLAlchemy()
 
 
 class MixinAsDict:
-    def as_dict(self, skip=['hashed_password','id']):
+    def as_dict(self, skip=['hashed_password',]):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in skip}
-
-
-class Chat(MixinAsDict, db.Model):
-    __tablename__ = 'chats'
-
-    id = db.Column(db.Integer, primary_key=True)
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
-    # author = db.relationship('User', backref='chats')
-    # recipient = db.relationship('User', backref='chats')
-    # messages = db.relationship('Message', backref='chat')
-
-
-class Post(MixinAsDict, db.Model):
-    __tablename__ = 'posts'
-
-    id = db.Column(db.Integer, primary_key=True)
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    walls_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    body = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
-    # comments = db.relationship('Comment', backref='post')
-    # author = db.relationship('User', backref='posts')
-    # recipient = db.relationship('User')
-
-
 
 
 class User(MixinAsDict, db.Model):
@@ -75,21 +44,127 @@ class User(MixinAsDict, db.Model):
     def find_by_email(cls, email):
         return cls.query.filter(cls.email == email).one()
 
-    interests = db.relationship('Interest', secondary='interests_users')
-    chats = db.relationship('Chat', backref='user', foreign_keys='[Chat.authors_id]')
-    # messages = db.relationship('Message', backref='user', foreign_keys='[Message.authors_id]')
+    interests = db.relationship('Interest', secondary='interests_users', back_populates='subscribers')
+    posts = db.relationship('Post', back_populates='author')
+    reactions = db.relationship('Reaction', back_populates='author')
+    # requested_friends = db.relationship('User', secondary='friendships', foreign_keys="[Friendship.accepters_id]")
+    # accepted_friends = db.relationship('User', secondary='friendships', foreign_keys="[Friendship.requesters_id]")
+    # chats = db.relationship('Chat', back_populates='user', foreign_keys='[Chat.authors_id]')
+    # messages = db.relationship('Message', back_populates='user', foreign_keys='[Message.authors_id]')
     # messages = db.relationship('User', back_populates='author', foreign_keys="[Message.authors_id]")
-    messages = db.relationship('Message', back_populates='author',foreign_keys="[Message.authors_id]")
+
+    # messages = db.relationship('Message', back_populates='author',foreign_keys="[Message.authors_id]")
     # messages_r = db.relationship('User',back_populates='recipient', foreign_keys="[Message.recipients_id]")
 
-friendship = db.Table(
-    'friendships',
-    db.Model.metadata,
-    db.Column('requester_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('accepter_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('status_accepted', db.Boolean, default=False, nullable=False),
-    db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
-)
+
+class InterestUser(MixinAsDict, db.Model):
+    __tablename__ = 'interests_users'
+    id = db.Column(db.Integer, primary_key=True)
+    users_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    interests_id = db.Column(db.Integer, db.ForeignKey('interests.id'), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+    # users = db.relationship('User', back_populates='interestuser', foreign_keys=[users_id])
+    # interests = db.relationship('Interest', back_populates='interestuser',foreign_keys=[interests_id])
+
+
+class Interest(MixinAsDict, db.Model):# channels
+    __tablename__ = 'interests'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    # author_id = db.Column(db.Integer)
+    subscribers = db.relationship('User', secondary='interests_users', back_populates='interests')
+
+
+class Post(MixinAsDict, db.Model):
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # walls_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    body = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+    # comments = db.relationship('Comment', back_populates='post')
+    author = db.relationship('User', back_populates='posts')
+    reactions = db.relationship('Reaction', back_populates='post')
+    # recipient = db.relationship('User')
+    def to_dict(self):
+        return self.as_dict(skip=['authors_id', 'created_at', 'updated_at'])
+
+
+
+# class Comment(MixinAsDict, db.Model):
+#     __tablename__ = 'comments'
+     
+#     id = db.Column(db.Integer, primary_key=True)
+#     body = db.Column(db.String(), nullable=False)
+#     posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)  # posts, images, other media 
+#     authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+#     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+#     post = db.relationship('Post', back_populates='comments')
+#     author = db.relationship('User', back_populates='comments')
+
+
+
+class Reaction(MixinAsDict, db.Model):
+    __tablename__ = 'reactions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    # type_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    # comments_id = db.Column(db.Integer, db.ForeignKey('comments.id'))  # add these if you want commends to also be reactiond
+    # reference = db.Column(db.String(15), nullable=False)  # ['post', 'comments',...]
+    reaction_type = db.Column(db.Integer, nullable=False)  # reaction(1), hate(2), love etc...
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+    author = db.relationship('User', back_populates='reactions')
+    post = db.relationship('Post', back_populates='reactions')  
+    # comment = db.relationship('Comment', back_populates='reaction')
+
+
+
+# class Chat(MixinAsDict, db.Model):
+#     __tablename__ = 'chats'
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+#     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+
+#     # author = db.relationship('User', back_populates='chats')
+#     # recipient = db.relationship('User', back_populates='chats')
+#     # messages = db.relationship('Message', back_populates='chat')
+
+
+
+# friendship = db.Table(
+#     'friendships',
+#     db.Model.metadata,
+#     db.Column('requester_id', db.Integer, db.ForeignKey('users.id')),
+#     db.Column('accepter_id', db.Integer, db.ForeignKey('users.id')),
+#     db.Column('status_accepted', db.Boolean, default=False, nullable=False),
+#     db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
+# )
+
+
+# class Friendship(MixinAsDict, db.Model):
+#     __tablename__ = 'friendships'
+#     id = db.Column(db.Integer, primary_key=True)
+#     requesters_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     accepters_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     status_accepted = db.Column(db.Boolean, default=False, nullable=False)
+#     created_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
 
 # interest_user = db.Table(
@@ -101,79 +176,22 @@ friendship = db.Table(
 # )
 
 
-class InterestUser(MixinAsDict, db.Model):
-    __tablename__ = 'interests_users'
-    id = db.Column(db.Integer, primary_key=True)
-    users_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    interests_id = db.Column(db.Integer, db.ForeignKey('interests.id'), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
-    # users = db.relationship('User', backref='interestuser', foreign_keys=[users_id])
-    # interests = db.relationship('Interest', backref='interestuser',foreign_keys=[interests_id])
+# class Message(MixinAsDict, db.Model):
+#     __tablename__ = 'messages'
 
+#     id = db.Column(db.Integer, primary_key=True)
+#     body = db.Column(db.Text, nullable=False)
+#     chats_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
+#     recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # maybe unnecessary
+#     # without it we would have secondary relationship. might be annoyting to send recipient_id along from front end
+#     authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+#     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
-
-class Message(MixinAsDict, db.Model):
-    __tablename__ = 'messages'
-
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
-    chats_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
-    recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # maybe unnecessary
-    # without it we would have secondary relationship. might be annoyting to send recipient_id along from front end
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
-    chat = db.relationship('Chat', backref='messages')
-    author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
-    # recipient = db.relationship('User', foreign_keys=[recipients_id])
+#     chat = db.relationship('Chat', back_populates='messages')
+#     author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
+#     # recipient = db.relationship('User', foreign_keys=[recipients_id])
 
     
    
-
-
-class Comment(MixinAsDict, db.Model):
-    __tablename__ = 'comments'
-     
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(), nullable=False)
-    posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)  # posts, images, other media 
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
-    post = db.relationship('Post', backref='comments')
-    author = db.relationship('User', backref='comments')
-
-
-class Interest(MixinAsDict, db.Model):
-    # channels
-    __tablename__ = 'interests'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-    # author_id = db.Column(db.Integer)
-    # users = db.relationship('User', secondary='InterestUser', backref='interests')
-
-
-class Like(MixinAsDict, db.Model):
-    __tablename__ = 'likes'
-
-    id = db.Column(db.Integer, primary_key=True)
-    # type_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id')) #? does user_id make more sense:?
-    posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    comments_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
-    reference = db.Column(db.String(15), nullable=False)  # ['post', 'comments',...]
-    like_type = db.Column(db.Integer, nullable=False)  # like(1), hate(2), love etc...
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-
-    author = db.relationship('User', backref='likes')
-    post = db.relationship('User', backref='like')  #? is this a weird one way 1-many!
-    comment = db.relationship('Comment', backref='like')
-
