@@ -47,6 +47,9 @@ class User(MixinAsDict, db.Model):
     interests = db.relationship('Interest', secondary='interests_users', back_populates='subscribers')
     posts = db.relationship('Post', back_populates='author')
     reactions = db.relationship('Reaction', back_populates='author')
+    created_interests = db.relationship('Interest', back_populates='creator')
+    def createdInterests(self):
+        Interest.query.filter(users)
     # requested_friends = db.relationship('User', secondary='friendships', foreign_keys="[Friendship.accepters_id]")
     # accepted_friends = db.relationship('User', secondary='friendships', foreign_keys="[Friendship.requesters_id]")
     # chats = db.relationship('Chat', back_populates='user', foreign_keys='[Chat.authors_id]')
@@ -76,9 +79,10 @@ class Interest(MixinAsDict, db.Model):# channels
     name = db.Column(db.String(60), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-    # author_id = db.Column(db.Integer)
+    creators_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) 
     subscribers = db.relationship('User', secondary='interests_users', back_populates='interests')
 
+    creator = db.relationship('User', back_populates='created_interests')
 
 class Post(MixinAsDict, db.Model):
     __tablename__ = 'posts'

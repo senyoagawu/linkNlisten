@@ -17,23 +17,28 @@ with app.app_context():
     demouser = User(first_name='demo',last_name='user', email='demo@gmail.com', hashed_password=generate_password_hash('password'), bio='stuff about stuff', location='location')
     db.session.add(demouser)
     db.session.commit()
-    for i in interests:
-        db.session.add(Interest(name=i, created_at='now', updated_at='now'))
-
-        db.session.commit()
         
-    for i in range(50):
+    for a in range(5):
         u = User(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
             email=fake.email(),
-            password='password',
+            password=generate_password_hash('password'),
             )
         db.session.add(u)
         db.session.commit()
-        db.session.add(InterestUser(users_id=u.id, interests_id=1+ i % 33, created_at='now', updated_at='now'))
         db.session.commit()
-        for interest in interests:
-            for i in range(5):
-                db.session.add(Post(authors_id=u.id, body=fake.text(), created_at='now', updated_at='now'))
-                db.session.commit()
+
+    for i in range(len(interests)):
+        db.session.add(Interest(name=interests[i], created_at='now', updated_at='now', creators_id=(i % 6)+1))
+        db.session.commit()
+
+    for i in range(len(interests)):
+        db.session.add(InterestUser(users_id=u.id, interests_id=1+ a % 33, created_at='now', updated_at='now'))
+        db.session.commit()
+
+
+    for interest in interests:
+        for b in range(3):
+            db.session.add(Post(authors_id=u.id, body=fake.text(), created_at='now', updated_at='now'))
+            db.session.commit()
