@@ -34,8 +34,9 @@ def fetch_interests_with_follows(email):
 @bp.route('/', methods=["POST"], strict_slashes=False)  # add new interest
 def add_interest():
     data = request.json
+    userId = User.find_by_email(data['email']).id
     print(f"\n\n\nDATA\n{data}\n\n\n")
-    interest = Interest(name=data['name'], created_at='now', updated_at='now')
+    interest = Interest(name=data['name'], created_at='now', updated_at='now',creators_id=userId)
     db.session.add(interest)
     db.session.commit()
 
