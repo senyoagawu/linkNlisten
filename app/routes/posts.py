@@ -49,7 +49,7 @@ def add_post():
     email = data['email']
     userId = User.find_by_email(email).id
 
-    post = Post(body=data['body'], authors_id=userId, created_at='now', updated_at='now')
+    post = Post(body=data['message'], authors_id=userId, created_at='now', updated_at='now')
     db.session.add(post)
     db.session.commit()
 
