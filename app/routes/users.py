@@ -25,6 +25,7 @@ def fetch_users_friends(email):
 def edit_user(email):
     data = request.json
     user = User.find_by_email(email)
+    print(data)
     try:
         user.first_name = data['first_name'],
         user.last_name = data['last_name'],
