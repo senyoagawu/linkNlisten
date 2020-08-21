@@ -3,16 +3,19 @@ from app.models import db, User
 
 bp = Blueprint("users", __name__, url_prefix='/api/users')
 
+
 @bp.route('/')  # fetch all users
 def fetch_users():
-    users = [u.as_dict() for u in User.query.all()]
-    return {'users': users}
+    users = [u.email for u in User.query.all()]
+    return {'user_emails': users}
+
 
 @bp.route('/<string:email>')  # fetch a single user
 def fetch_user(email):
     # db.session(User, )
     user = User.find_by_email(email).as_dict()
     return {'user': user}
+
 
 @bp.route('/<string:email>')  # fetch friends of a single user
 def fetch_users_friends(email):
@@ -37,7 +40,8 @@ def edit_user(email):
     except AssertionError as message:
         print(str(message))
         return jsonify({"error": str(message)}), 400
- 
+
+
 @bp.route('<string:email>', methods=['DELETE'])  # fetch a single jobseeker
 def delete_user(email):
     data = request.json
@@ -45,3 +49,4 @@ def delete_user(email):
     db.session.delete(user)
     db.session.commit()
     return f'record with email {user.email} successfully deleted'
+
