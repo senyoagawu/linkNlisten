@@ -4,10 +4,12 @@ from app.models import db, Interest, User
 
 bp = Blueprint("interests", __name__, url_prefix='/api/interests')
 
+
 @bp.route('/')  # fetch all interests
 def fetch_interests():
     interests = [{'name': i.name, 'id': i.id} for i in Interest.query.all()]
     return {'interests': interests}
+
 
 @bp.route('/<string:email>/')  # fetch all interests, with user follows data
 def fetch_interests_with_follows(email):
@@ -19,8 +21,10 @@ def fetch_interests_with_follows(email):
     # print(user_interests, 11 in user_interests)
     followed_interests_ids = [fi.id for fi in followed_interests]
     interests = {
-        i.id: [i.name, i.id in followed_interests_ids] for i in Interest.query.all()
-            
+        i.id: [
+            i.name, i.id in
+            followed_interests_ids
+            ] for i in Interest.query.all()
         }
 
     return {
@@ -31,12 +35,18 @@ def fetch_interests_with_follows(email):
         }
     }
 
+
 @bp.route('/', methods=["POST"], strict_slashes=False)  # add new interest
 def add_interest():
     data = request.json
     userId = User.find_by_email(data['email']).id
     print(f"\n\n\nDATA\n{data}\n\n\n")
-    interest = Interest(name=data['name'], created_at='now', updated_at='now',creators_id=userId)
+    interest = Interest(
+        name=data['name'],
+        created_at='now',
+        updated_at='now',
+        creators_id=userId
+    )
     db.session.add(interest)
     db.session.commit()
 

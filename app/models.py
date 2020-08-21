@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 
 class MixinAsDict:
-    def as_dict(self, skip=['hashed_password',]):
+    def as_dict(self, skip=['hashed_password', ]):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in skip}
 
 
@@ -50,14 +50,6 @@ class User(MixinAsDict, db.Model):
     created_interests = db.relationship('Interest', back_populates='creator')
     def createdInterests(self):
         Interest.query.filter(users)
-    # requested_friends = db.relationship('User', secondary='friendships', foreign_keys="[Friendship.accepters_id]")
-    # accepted_friends = db.relationship('User', secondary='friendships', foreign_keys="[Friendship.requesters_id]")
-    # chats = db.relationship('Chat', back_populates='user', foreign_keys='[Chat.authors_id]')
-    # messages = db.relationship('Message', back_populates='user', foreign_keys='[Message.authors_id]')
-    # messages = db.relationship('User', back_populates='author', foreign_keys="[Message.authors_id]")
-
-    # messages = db.relationship('Message', back_populates='author',foreign_keys="[Message.authors_id]")
-    # messages_r = db.relationship('User',back_populates='recipient', foreign_keys="[Message.recipients_id]")
 
 
 class InterestUser(MixinAsDict, db.Model):
@@ -68,8 +60,6 @@ class InterestUser(MixinAsDict, db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
-    # users = db.relationship('User', back_populates='interestuser', foreign_keys=[users_id])
-    # interests = db.relationship('Interest', back_populates='interestuser',foreign_keys=[interests_id])
 
 
 class Interest(MixinAsDict, db.Model):# channels
@@ -98,6 +88,7 @@ class Post(MixinAsDict, db.Model):
     author = db.relationship('User', back_populates='posts')
     reactions = db.relationship('Reaction', back_populates='post')
     # recipient = db.relationship('User')
+
     def to_dict(self):
         return self.as_dict(skip=['authors_id', 'created_at', 'updated_at'])
 
@@ -171,13 +162,6 @@ class Reaction(MixinAsDict, db.Model):
 #     created_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
 
-# interest_user = db.Table(
-#     'interests_users',
-#     db.Model.metadata,
-#     db.Column('users_id', db.Integer, db.ForeignKey('users.id')),
-#     db.Column('interests_id', db.Integer, db.ForeignKey('interests.id')),
-#     db.Column('created_at', db.DateTime(timezone=True), default=func.now(), nullable=False)
-# )
 
 
 
