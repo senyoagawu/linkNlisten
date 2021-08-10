@@ -7,8 +7,12 @@ db = SQLAlchemy()
 
 
 class MixinAsDict:
+    """pass in array of column names you want to skip"""
     def as_dict(self, skip=['hashed_password', ]):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in skip}
+        return {
+            c.name: getattr(self, c.name) for c
+            in self.__table__.columns if c.name not in skip
+        }
 
 
 class User(MixinAsDict, db.Model):
@@ -23,6 +27,7 @@ class User(MixinAsDict, db.Model):
     profile_pic = db.Column(db.String, default="https://i.imgur.com/kfQKjwm.png")
     location = db.Column(db.String)
 
+    @property
     def name(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -36,10 +41,10 @@ class User(MixinAsDict, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
-    
+
     def is_valid_email(self, email):
         return not re.match("[^@]+@[^@]+\.[^@]+", email)
-     
+
     @classmethod
     def find_by_email(cls, email):
         return cls.query.filter(cls.email == email).one()
@@ -69,7 +74,7 @@ class Interest(MixinAsDict, db.Model):# channels
     name = db.Column(db.String(60), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
-    creators_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) 
+    creators_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     subscribers = db.relationship('User', secondary='interests_users', back_populates='interests')
 
     creator = db.relationship('User', back_populates='created_interests')
@@ -96,10 +101,10 @@ class Post(MixinAsDict, db.Model):
 
 # class Comment(MixinAsDict, db.Model):
 #     __tablename__ = 'comments'
-     
+
 #     id = db.Column(db.Integer, primary_key=True)
 #     body = db.Column(db.String(), nullable=False)
-#     posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)  # posts, images, other media 
+#     posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)  # posts, images, other media
 #     authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 #     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
 #     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
@@ -108,13 +113,12 @@ class Post(MixinAsDict, db.Model):
 #     author = db.relationship('User', back_populates='comments')
 
 
-
 class Reaction(MixinAsDict, db.Model):
     __tablename__ = 'reactions'
 
     id = db.Column(db.Integer, primary_key=True)
     # type_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     # comments_id = db.Column(db.Integer, db.ForeignKey('comments.id'))  # add these if you want commends to also be reactiond
     # reference = db.Column(db.String(15), nullable=False)  # ['post', 'comments',...]
@@ -123,7 +127,7 @@ class Reaction(MixinAsDict, db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
     author = db.relationship('User', back_populates='reactions')
-    post = db.relationship('Post', back_populates='reactions')  
+    post = db.relationship('Post', back_populates='reactions')
     # comment = db.relationship('Comment', back_populates='reaction')
 
 
@@ -179,7 +183,4 @@ class Reaction(MixinAsDict, db.Model):
 
 #     chat = db.relationship('Chat', back_populates='messages')
 #     author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
-#     # recipient = db.relationship('User', foreign_keys=[recipients_id])
-
-    
-   
+    # recipient = db.relationship('User', foreign_keys=[recipients_id])

@@ -23,7 +23,7 @@ def fetch_users_friends(email):
     user = [f.as_dict() for f in User.find_by_email(email).one().friends]
     return {'user': user}
 
- 
+
 @bp.route('<string:email>', methods=['PUT'])  # edit a single user
 def edit_user(email):
     data = request.json
@@ -49,4 +49,3 @@ def delete_user(email):
     db.session.delete(user)
     db.session.commit()
     return f'record with email {user.email} successfully deleted'
-
