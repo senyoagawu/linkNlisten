@@ -7,11 +7,12 @@ db = SQLAlchemy()
 
 
 class MixinAsDict:
-	"""pass in array of column names you want to skip"""
-	def as_dict(self, skip=['hashed_password', ]):
+    """pass in array of column names you want to skip"""
+    def as_dict(self, skip=['hashed_password', ]):
         return {
-			c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in skip
-			}
+            c.name: getattr(self, c.name) for c
+            in self.__table__.columns if c.name not in skip
+        }
 
 
 class User(MixinAsDict, db.Model):
@@ -112,7 +113,6 @@ class Post(MixinAsDict, db.Model):
 #     author = db.relationship('User', back_populates='comments')
 
 
-
 class Reaction(MixinAsDict, db.Model):
     __tablename__ = 'reactions'
 
@@ -169,18 +169,18 @@ class Reaction(MixinAsDict, db.Model):
 
 
 
-class Message(MixinAsDict, db.Model):
-    __tablename__ = 'messages'
+# class Message(MixinAsDict, db.Model):
+#     __tablename__ = 'messages'
 
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
-    chats_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
-    recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # maybe unnecessary
-    # without it we would have secondary relationship. might be annoyting to send recipient_id along from front end
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+#     id = db.Column(db.Integer, primary_key=True)
+#     body = db.Column(db.Text, nullable=False)
+#     chats_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
+#     recipients_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # maybe unnecessary
+#     # without it we would have secondary relationship. might be annoyting to send recipient_id along from front end
+#     authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+#     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
-    chat = db.relationship('Chat', back_populates='messages')
-    author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
+#     chat = db.relationship('Chat', back_populates='messages')
+#     author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
     # recipient = db.relationship('User', foreign_keys=[recipients_id])

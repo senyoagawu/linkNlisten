@@ -47,7 +47,6 @@ interests = [
 with app.app_context():
     db.drop_all()
     db.create_all()
-	z
     demouser = User(
         first_name='demo',
         last_name='user',
