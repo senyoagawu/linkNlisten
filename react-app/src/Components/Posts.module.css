@@ -1,0 +1,47 @@
+.post_container{
+  border: 1px solid black;
+  width: 700px;
+  height: 700px;
+  background-color:#f4eaea;
+  margin: 20px;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.inner_container{
+  
+  width: 95%;
+  height: 95%;
+}
+.post_author_image{
+  height: 50px;
+  width: 50px;
+
+}
+
+.post{
+  display: flex;
+  border: 1px solid #6455A6;
+  
+}
+.body{
+  font-size: 20px;
+  color: purple;
+}
+
+.userInfo{
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.postInfo{
+  border: 1px solid red;
+  width: 
+}
+.post, .post_author_image, .post_author, .userInfo, .postInfo, {
+
+}
+

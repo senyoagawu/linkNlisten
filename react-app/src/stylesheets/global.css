@@ -1,0 +1,17 @@
+a:hover{
+  color: #B05AAF;
+  cursor: pointer;
+  font-weight: 600;
+}
+@font-face { font-family: "font1";
+  src: local('MyFont'),
+  url(../fonts/RobotoMono/RobotoMono.ttf) format("truetype");}
+
+@font-face { font-family: "font2";
+  src: local('MyFont'),
+  url(../fonts/Luckiest_Guy/LuckiestGuy-Regular.ttf) format("truetype");}
+
+body{
+  font-family: 'font1';
+  font-size: 20px;;
+}
