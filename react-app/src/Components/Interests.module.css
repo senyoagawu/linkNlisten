@@ -66,8 +66,8 @@
 .card:before {
   content: "";
   position: absolute;
-  top: calc(var(--base-grid)*-1);
-  left: calc(var(--base-grid)*-3);
+  top: calc(var(--base-grid)*(-1));
+  left: calc(var(--base-grid)*(-3));
   border: 2px dashed var(--colour-background);
   background-image: repeating-linear-gradient(-24deg,transparent,transparent 4px,var(--colour-background-stripes) 0, var(--colour-background-stripes) 5px);
   z-index: -1;
@@ -79,14 +79,14 @@
   width: calc(var(--base-grid)*35);
   height: calc(var(--base-grid)*15);
 }
- 
+
 .card_component {
   background-color: var(--colour-body-background);
   border: 2px solid var(--colour-background);
   display: block;
   width: 100%;
   height: 100%;
-} 
+}
 
 .closeBtn {
   color: #6455A6;
@@ -98,4 +98,4 @@
     color: #B05AAF;
     cursor: pointer;
     font-weight: 600;
-} 
+}
