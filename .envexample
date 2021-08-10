@@ -1,11 +1,11 @@
 PORT=8080
-DB_USERNAME=linknlistenapp
+DB_USERNAME=linknlisten
 DB_PASSWORD=password
-DB_DATABASE=linknlisten
+DB_DATABASE=linknlisten_db
 DB_HOST=localhost
 JWT_SECRET=5fdb40b10f60f2487f2c675dd9eaeb7a8b62f0e4a33a71500614aab963febd35
 JWT_EXPIRES_IN=604800
-FLASK_APP=api
+FLASK_APP=app
 FLASK_ENV=development
 DATABASE_URL=postgresql://linknlisten:hunter123@localhost/linknlisten_db
 SECRET_KEY=c63df6ad-5c72-4270-9730-eaa2ccb2b204

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 // import { Card, CardHeader} from "react-simple-card";
 import {AppContext} from '../App'
-import styles from './Interests.module.css'
+// import styles from './Interests.module.css'
 
 const InterestCard = ({ info:{interest,idx}}) => {
   const {state, setState} = useContext(AppContext)
@@ -21,7 +21,8 @@ const InterestCard = ({ info:{interest,idx}}) => {
   }
 
   return (
-    <div className={styles.card}   onClick={card_clicked}>
+    <div className="styles.card"   onClick={card_clicked}>
+    {/* <div className={styles.card}   onClick={card_clicked}> */}
 			Please insert card here
       {/* <Card  className={styles.card_component} bgColor={interest[1] ? '#5fa83e' : '#fff'}>
         <CardHeader  style={{'border':'none'}} className={styles.header}>{interest[0]}</CardHeader>

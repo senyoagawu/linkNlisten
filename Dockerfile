@@ -13,7 +13,7 @@ RUN npm run build
 FROM python:3.8
 
 # Setup Flask environment
-ENV FLASK_APP=api
+ENV FLASK_APP=app
 ENV FLASK_ENV=production
 ENV SQLALCHEMY_ECHO=True
 
@@ -28,4 +28,4 @@ RUN pip install -r requirements.txt
 RUN pip install psycopg2
 
 # Run flask environment
-CMD gunicorn api:api
+CMD gunicorn app:app
