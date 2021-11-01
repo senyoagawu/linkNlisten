@@ -1,4 +1,3 @@
-
 FROM node:12 AS build-stage
 
 WORKDIR /react-app
