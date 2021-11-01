@@ -12,11 +12,12 @@ class MixinAsDict:
         return {
             c.name: getattr(self, c.name) for c
             in self.__table__.columns if c.name not in skip
+
         }
 
 
 class User(MixinAsDict, db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(60), nullable=False)
@@ -29,7 +30,7 @@ class User(MixinAsDict, db.Model):
 
     @property
     def name(self):
-        return f'{self.first_name} {self.last_name}'
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def password(self):
@@ -49,54 +50,77 @@ class User(MixinAsDict, db.Model):
     def find_by_email(cls, email):
         return cls.query.filter(cls.email == email).one()
 
-    interests = db.relationship('Interest', secondary='interests_users', back_populates='subscribers')
-    posts = db.relationship('Post', back_populates='author')
-    reactions = db.relationship('Reaction', back_populates='author')
-    created_interests = db.relationship('Interest', back_populates='creator')
+    interests = db.relationship(
+        "Interest", secondary="interests_users", back_populates="subscribers"
+    )
+    posts = db.relationship("Post", back_populates="author")
+    reactions = db.relationship("Reaction", back_populates="author")
+    created_interests = db.relationship("Interest", back_populates="creator")
+
     def createdInterests(self):
         Interest.query.filter(users)
 
 
 class InterestUser(MixinAsDict, db.Model):
-    __tablename__ = 'interests_users'
+    __tablename__ = "interests_users"
     id = db.Column(db.Integer, primary_key=True)
-    users_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    interests_id = db.Column(db.Integer, db.ForeignKey('interests.id'), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    users_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    interests_id = db.Column(db.Integer, db.ForeignKey("interests.id"), nullable=False)
+    created_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at = db.Column(
+        db.DateTime(timezone=True), onupdate=func.now(), nullable=False
+    )
 
 
-
-class Interest(MixinAsDict, db.Model):# channels
-    __tablename__ = 'interests'
+class Interest(MixinAsDict, db.Model):  # channels
+    __tablename__ = "interests"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False)
+
+    created_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at = db.Column(
+        db.DateTime(timezone=True), onupdate=func.now(), nullable=False
+    )
+    creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    subscribers = db.relationship(
+        "User", secondary="interests_users", back_populates="interests"
+    )
+
+    creator = db.relationship("User", back_populates="created_interests")
+
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
     creators_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     subscribers = db.relationship('User', secondary='interests_users', back_populates='interests')
 
-    creator = db.relationship('User', back_populates='created_interests')
+
 
 class Post(MixinAsDict, db.Model):
-    __tablename__ = 'posts'
+    __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True)
-    authors_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    authors_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     # walls_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     body = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+    created_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at = db.Column(
+        db.DateTime(timezone=True), onupdate=func.now(), nullable=False
+    )
 
     # comments = db.relationship('Comment', back_populates='post')
-    author = db.relationship('User', back_populates='posts')
-    reactions = db.relationship('Reaction', back_populates='post')
+    author = db.relationship("User", back_populates="posts")
+    reactions = db.relationship("Reaction", back_populates="post")
     # recipient = db.relationship('User')
 
     def to_dict(self):
-        return self.as_dict(skip=['authors_id', 'created_at', 'updated_at'])
-
+        return self.as_dict(skip=["authors_id", "created_at", "updated_at"])
 
 
 # class Comment(MixinAsDict, db.Model):
@@ -114,10 +138,11 @@ class Post(MixinAsDict, db.Model):
 
 
 class Reaction(MixinAsDict, db.Model):
-    __tablename__ = 'reactions'
+    __tablename__ = "reactions"
 
     id = db.Column(db.Integer, primary_key=True)
     # type_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+
     authors_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     posts_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     # comments_id = db.Column(db.Integer, db.ForeignKey('comments.id'))  # add these if you want commends to also be reactiond
@@ -128,8 +153,8 @@ class Reaction(MixinAsDict, db.Model):
 
     author = db.relationship('User', back_populates='reactions')
     post = db.relationship('Post', back_populates='reactions')
-    # comment = db.relationship('Comment', back_populates='reaction')
 
+    # comment = db.relationship('Comment', back_populates='reaction')
 
 
 # class Chat(MixinAsDict, db.Model):
@@ -144,7 +169,6 @@ class Reaction(MixinAsDict, db.Model):
 #     # author = db.relationship('User', back_populates='chats')
 #     # recipient = db.relationship('User', back_populates='chats')
 #     # messages = db.relationship('Message', back_populates='chat')
-
 
 
 # friendship = db.Table(
@@ -166,9 +190,6 @@ class Reaction(MixinAsDict, db.Model):
 #     created_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
 
-
-
-
 # class Message(MixinAsDict, db.Model):
 #     __tablename__ = 'messages'
 
@@ -183,4 +204,5 @@ class Reaction(MixinAsDict, db.Model):
 
 #     chat = db.relationship('Chat', back_populates='messages')
 #     author = db.relationship('User', back_populates='messages', foreign_keys=[authors_id])
-    # recipient = db.relationship('User', foreign_keys=[recipients_id])
+
+#     # recipient = db.relationship('User', foreign_keys=[recipients_id])
