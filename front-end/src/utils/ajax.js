@@ -59,7 +59,7 @@ export const getUsersEmails = () => {
   return myGet(backendUrl + "/users");
 };
 
-export const getInterestsFollowed = (email) => {
+export const getSubscribedInterests = (email) => {
   //!how is this working (asynchronicity)
   // if (!email) return;
   return myGet(backendUrl + `/interests/${email}/`);
@@ -94,4 +94,15 @@ export const editPost = (postId, userId, data) => {
 
 export const deletePost = (postId, userId) => {
   return myDelete(backendUrl + `/posts/${postId}/${userId}`);
+};
+
+const loginDemo = async () => {
+  const response = await fetch(backendUrl + "/sessions/login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: "demo@gmail.com",
+      password: "password",
+    }),
+  });
 };

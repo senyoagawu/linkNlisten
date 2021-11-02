@@ -6,9 +6,10 @@ import { BrowserRouter, Switch } from "react-router-dom";
 import Splash from "./Components/Views/Splash";
 import { PrivateRoute, AuthRoute } from "./utils/routes";
 import Home from "./Components/Views/Home";
+import Interests from "./Components/Views/Interests";
 // import {getInterests} from './utils/ajax'
 import {
-  getInterestsFollowed,
+  getSubscribedInterests,
   getPosts,
   getIndividualPosts,
 } from "./utils/ajax";
@@ -52,7 +53,7 @@ export const App = (props) => {
   useEffect(() => {
     (async () => {
       debugger;
-      const { interests } = await getInterestsFollowed(user?.email);
+      const { interests } = await getSubscribedInterests(user?.email);
       const { posts } = await getPosts(user?.email);
       const { individual_posts: individualPosts } = await getIndividualPosts(
         user?.email
@@ -91,6 +92,12 @@ export const App = (props) => {
           path="/splash"
           render={(props)=> <Splash {...props} loggedIn={loggedIn} setUser={setUser} userState={userState} setTokenState={setTokenState}/>}
         /> */}
+          <PrivateRoute
+            exact
+            path="/interests"
+            component={Interests}
+            loggedIn={loggedIn()}
+          />
           <PrivateRoute exact path="/" component={Home} loggedIn={loggedIn()} />
         </Switch>
       </AppContext.Provider>
