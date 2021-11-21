@@ -21,7 +21,7 @@ export const PrivateRoute = ({ components: { C1, C2, C3 }, ...rest }) => {
   );
 };
 
-export const AuthRoute = ({ component: { C1, `C2, C3 }, ...rest }) => {
+export const AuthRoute = ({ component: { C1, C2, C3 }, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -29,11 +29,11 @@ export const AuthRoute = ({ component: { C1, `C2, C3 }, ...rest }) => {
         rest.loggedIn ? (
           <Redirect to="/" />
         ) : (
-          <>
+          <div>
             <C1 {...props} />
             <C2 {...props} />
             <C3 {...props} />
-          </>
+          </div>
         )
       }
     />

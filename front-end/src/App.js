@@ -98,9 +98,9 @@ export const App = (props) => {
         }}
       >
         <Navbar setModal={setModal} loggedIn={loggedIn} />
+        <Sidebar />
         <Switch>
           <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn()} />
-          {user !== null && <Sidebar setModal={setModal} />}
 
           <PrivateRoute
             exact
