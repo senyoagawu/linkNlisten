@@ -1,7 +1,9 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useContext } from "react";
+import { AppContext } from "../App";
 export default function NavBarListItem({ onlyPrivate, onlyPublic, children }) {
-  const loggedIn = useSelector((state) => state.session.loggedIn);
+  const {
+    slices: { user, loggedIn },
+  } = useContext(AppContext);
 
   const show = (onlyPrivate, onlyPublic, loggedIn) => {
     if (loggedIn) {
@@ -27,5 +29,8 @@ export default function NavBarListItem({ onlyPrivate, onlyPublic, children }) {
     }
   };
   // const show = (private, public, loggedIn) => loggedIn ? (public ? false : private ? true: false) : false
-  return <>{show(onlyPrivate, onlyPublic, loggedIn) && <li>{children}</li>}</>;
+
+  return show(onlyPrivate, onlyPublic, loggedIn()) === true ? (
+    <li>{children}</li>
+  ) : null;
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { postSessions } from "../../utils/ajax";
+import { loginUser } from "../../actions/auth";
 import styles from "./Form.module.css";
 
 const Login = ({ setModal }) => {
@@ -17,25 +17,20 @@ const Login = ({ setModal }) => {
 
   const handleSubmit = async (e, payload = undefined) => {
     const userCreds = payload || loginState;
-    debugger
     e.preventDefault();
-    const {
-      access_token,
-      user,
-    } = await postSessions(userCreds);
+    const { access_token, user } = await loginUser(userCreds);
 
     if (access_token && user) {
       localStorage.access_token = access_token;
       // setTokenState(access_token);
       localStorage.user = JSON.stringify(user);
       // setUser(user);
-     
+
       // history.push("/");
-      window.location.href = '/'
+      window.location.href = "/";
     }
     // console.log('before the push')
-    // debugger
-    // console.log('after the push')    
+    // console.log('after the push')
   };
 
   const loginDemoUser = (e) => {

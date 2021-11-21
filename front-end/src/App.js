@@ -1,11 +1,14 @@
 import React, { useState, useEffect, createContext } from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
+import * as authActions from "./actions/auth";
 // import {LoginForm, SignUpForm, EditProfileForm}  from "./Components/Pages/Forms";
 // import Login from './Components/Forms/Login'
 // import Signup from './Components/Views/Signup'
 import Splash from "./Components/Views/Splash";
 import { PrivateRoute, AuthRoute } from "./utils/routes";
 import Home from "./Components/Views/Home";
+import Sidebar from "./Components/Sidebar";
+import Ridebar from "./Components/Ridebar";
 import Interests from "./Components/Views/Interests";
 // import {getInterests} from './utils/ajax'
 import {
@@ -41,28 +44,33 @@ export const App = (props) => {
   //   return { user, token, interests, posts };
   // };
 
-  const loggedIn = () => user.loggedIn !== null;
+  const loggedIn = () => user !== null;
 
   const [state, setState] = useState({
     user,
     token,
     posts: [],
     interests: [],
+    loggedIn,
   });
 
   useEffect(() => {
     (async () => {
-      debugger;
-      const { interests } = await getSubscribedInterests(user?.email);
-      const { posts } = await getPosts(user?.email);
-      const { individual_posts: individualPosts } = await getIndividualPosts(
-        user?.email
-      );
+      window.loginUser = authActions.loginUser;
+      window.signupUser = authActions.signupUser;
+      window.logoutUser = authActions.logoutUser;
+      window.loginDemo = authActions.loginDemo;
+
+      // const { interests } = await getSubscribedInterests(user?.email);
+      // const { posts } = await getPosts(user?.email);
+      // const { individual_posts: individualPosts } = await getIndividualPosts(
+      //   user?.email
+      // );
       //this converts backend from array to obj
       // [{id: 1, name: name}, ...] -> {id: [name, isUserSubscribed], ...}
       // interests.forEach(i => tally[i.id]= [i.name, false])
-      setInterests(interests);
-      setPosts(posts);
+      // setInterests(interests);
+      // setPosts(posts);
       // setState({ user, token, loggedIn, interests, posts, individualPosts });
     })();
   }, []);
@@ -79,26 +87,40 @@ export const App = (props) => {
           setState,
           setModal,
           modalStates,
+          slices: {
+            user,
+            token,
+            loggedIn,
+            interests,
+            posts,
+          },
           stateSetters: { setInterests, setPosts, setUser, setToken },
         }}
       >
         <Navbar setModal={setModal} loggedIn={loggedIn} />
         <Switch>
           <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn()} />
+          {user !== null && <Sidebar setModal={setModal} />}
 
-          {/* <AuthRoute exact path='/' component={Home} />
-        <Route path='/splash' component={Splash} /> */}
-          {/* <AuthRoute
-          path="/splash"
-          render={(props)=> <Splash {...props} loggedIn={loggedIn} setUser={setUser} userState={userState} setTokenState={setTokenState}/>}
-        /> */}
           <PrivateRoute
             exact
             path="/interests"
-            component={Interests}
+            components={{
+              C1: Sidebar,
+              C2: Interests,
+              C3: Ridebar, // cuz its the right sidebar
+            }}
             loggedIn={loggedIn()}
           />
-          <PrivateRoute exact path="/" component={Home} loggedIn={loggedIn()} />
+          <PrivateRoute
+            path="/"
+            components={{
+              C1: Sidebar,
+              C2: Home,
+              C3: Ridebar, // cuz its the right sidebar
+            }}
+            loggedIn={loggedIn()}
+          />
         </Switch>
       </AppContext.Provider>
     </BrowserRouter>

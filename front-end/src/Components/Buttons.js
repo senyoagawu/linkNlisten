@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { login, logout } from "../utils/ajax";
+import { loginDemo, logoutUser } from "../actions/auth";
 
-import NavBarListElement from "./NavBarItem";
+import NavBarListElement from "./NavbarLi";
 export default function Button({
   text,
   explanation,
@@ -52,6 +52,7 @@ export const DemoLoginButton = () => {
       onlyPublic={true}
       text={"Demo Login"}
       explanation={"click to login as a Demo User"}
+      onClick={() => loginDemo()}
       // action={login}
     />
   );
@@ -84,7 +85,7 @@ export const LogoutButton = () => {
       onlyPrivate={true}
       text={"Logout"}
       explanation={"click to logout"}
-      // thunk={logout}
+      onClick={() => logoutUser()}
     />
   );
 };

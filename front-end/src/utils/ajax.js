@@ -1,108 +1,95 @@
-const backendUrl = "http://localhost:5000/api";
+import packageData from "../utils/packageData";
+// const backendUrl = "http://localhost:5000/api";
 
-const myGet = async (path) => {
+export const myGet = async (path) => {
   const response = await fetch(path);
   return await response.json();
 };
 
-const myPost = async (path, data) => {
+export const myPost = async (path, data) => {
+  const body = JSON.stringify(data);
   const response = await fetch(path, {
+    header: {
+      "Content-Type": "application/json",
+    },
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body,
   });
   return await response.json();
 };
 
-const myPut = async (path, data) => {
+export const myPut = async (path, data) => {
+  const body = JSON.stringify(data);
   const response = await fetch(path, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body,
   });
   return await response.json();
 };
 
-const myDelete = async (path, data) => {
+export const myDelete = async (path, data) => {
+  const body = JSON.stringify(data);
+
   const response = await fetch(path, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body,
   });
   return await response.json();
 };
 
-// Actions
-export const postSessions = async (data) => {
-  return await myPost(backendUrl + "/sessions/", data);
-};
-
-export const signupUser = (data) => {
-  return myPost(backendUrl + "/sessions/signup/", data);
-};
+//ACTIONS
 
 export const editProfile = async (email, data) => {
   console.log(email, data);
-  return await myPut(backendUrl + `/users/${email}/`, data);
+  return await myPut(`/api/users/${email}/`, data);
 };
 
 export const getInterests = () => {
-  return myGet(backendUrl + "/interests/");
+  return myGet("/api/interests/");
 };
 // headers: { Authorization: `Bearer ${token}` },
 export const addInterest = async (data) => {
   console.log(data);
-  return await myPost(backendUrl + "/interests/", data);
+  return await myPost("/api/interests/", data);
 };
 
 export const getUsersEmails = () => {
-  return myGet(backendUrl + "/users");
+  return myGet("/api/users");
 };
 
 export const getSubscribedInterests = (email) => {
   //!how is this working (asynchronicity)
   // if (!email) return;
-  return myGet(backendUrl + `/interests/${email}/`);
+  // return myGet(`/api/interests/${email}/`);
 };
 
 export const followInterest = (email, id) => {
-  return myPost(backendUrl + `/interests_users/${email}/${id}/`);
+  return myPost(`/api/interests_users/${email}/${id}/`);
 };
 export const unfollowInterest = (email, id) => {
-  return myDelete(backendUrl + `/interests_users/${email}/${id}/`);
+  return myDelete(`/api/interests_users/${email}/${id}/`);
 };
 
 export const getPosts = (email) => {
-  const theGet = myGet(backendUrl + `/posts/${email}/`);
+  const theGet = myGet(`/api/posts/${email}/`);
   console.log(theGet);
   return theGet;
 };
 
 export const getIndividualPosts = (email) => {
-  return myGet(backendUrl + `/posts/individual/${email}/`);
+  return myGet(`/api/posts/individual/${email}/`);
 };
 
 export const createPost = (data) => {
   console.log(data);
-  return myPost(backendUrl + `/posts/`, data);
+  return myPost(`/api/posts/`, data);
 };
 
 export const editPost = (postId, userId, data) => {
   console.log(postId, userId, data);
-  return myPut(backendUrl + `/posts/${postId}/${userId}`, data);
+  return myPut(`/api/posts/${postId}/${userId}`, data);
 };
 
 export const deletePost = (postId, userId) => {
-  return myDelete(backendUrl + `/posts/${postId}/${userId}`);
-};
-
-const loginDemo = async () => {
-  const response = await fetch(backendUrl + "/sessions/login/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: "demo@gmail.com",
-      password: "password",
-    }),
-  });
+  return myDelete(`/api/posts/${postId}/${userId}`);
 };

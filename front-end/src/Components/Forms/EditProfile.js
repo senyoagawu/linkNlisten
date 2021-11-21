@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 // import {NavBar} from "../Navbar";
-import styles from './Form.module.css'
+import styles from "./Form.module.css";
 // import { uploadImage } from "../../uploadImage";
-import {editProfile} from '../../utils/ajax'
+import { editProfile } from "../../utils/ajax";
 
-
-const EditProfile = ({setModal}) => {
-  const storedUser  = localStorage.user
+const EditProfile = ({ setModal }) => {
+  const storedUser = localStorage.user;
   // const [profileImage, setImage] = useState(undefined)
-  const [profile, setProfile] = useState(storedUser ? JSON.parse(storedUser) : {});
+  const [profile, setProfile] = useState(
+    storedUser ? JSON.parse(storedUser) : {}
+  );
   const closeModal = () => {
-    setModal({})
-  }
+    setModal({});
+  };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault()
-    console.log(profile.email, profile)
-    debugger
-    const {user} = await editProfile(profile.email, profile)
-    setProfile(user)
-    localStorage.user = JSON.stringify(user)
-    setTimeout(closeModal, 1500)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(profile.email, profile);
+    const { user } = await editProfile(profile.email, profile);
+    setProfile(user);
+    localStorage.user = JSON.stringify(user);
+    setTimeout(closeModal, 1500);
   };
 
   const onchange = (e) => {
@@ -100,5 +100,4 @@ const EditProfile = ({setModal}) => {
   );
 };
 
-export default EditProfile
-
+export default EditProfile;
