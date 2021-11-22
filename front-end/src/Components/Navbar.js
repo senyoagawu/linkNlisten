@@ -1,10 +1,27 @@
 import React, { useContext } from "react";
-import styles from "./Splash.module.css";
-import { useHistory } from "react-router-dom";
+import "./Splash.module.css";
+import { useHistory, NavLink } from "react-router-dom";
+import "./Navbar.module.css";
 import { AppContext } from "../App";
+import NavbarLI from "./NavbarLi";
+import { homeSvg, interestsSvg } from "../svgs";
+import { ProtectedRoute } from "../utils/routes";
+import { loginDemo, logoutUser, loginUser, signupUser } from "../actions/auth";
+import {
+  Button,
+  LoginButton,
+  SignupButton,
+  DemoLoginButton,
+  LogoutButton,
+} from "./Buttons";
 
-const Navbar = () => {
-  const { setModal, loggedIn } = useContext(AppContext);
+export default function Navbar() {
+  const {
+    modalStates,
+    setModal,
+    loggedIn,
+    stateSetters: { setUser },
+  } = useContext(AppContext);
   // const modalMap = {
   //   login: <Login setModal={setModal} />,
   //   signup: <Signup setModal={setModal} />,
@@ -22,88 +39,66 @@ const Navbar = () => {
     localStorage.clear();
     window.location.href = "/splash";
   };
-
-  return loggedIn ? (
-    <div className={styles.navbar_container}>
-      <div className="splash navbar_logo">
-        <img
-          className={styles.logo}
-          src="/assets/images/2.png"
-          alt="sweetlogo"
-        />
-      </div>
-      <div>
-        <div className={styles.splash_links}>
-          <a
-            className="splash navbar_links navbar_link_about"
-            id="about"
-            href="http://sdkag.github.io"
-          >
-            about
-          </a>
-          <div
-            className="splash navbar_links navbar_link_login"
-            id="profile"
-            onClick={onclick}
-          >
-            profile
-          </div>
-          <div
-            className="splash navbar_links navbar_link_login"
-            id="logout"
-            onClick={logout}
-          >
-            logout
-          </div>
-          <div
-            className="splash navbar_links navbar_link_signup"
-            id=""
-            onClick={onclick}
-          >
-            home
-          </div>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div className={styles.navbar_container}>
-      <div
-        className="splash navbar_logo"
-        onClick={() => {
-          history.push("/");
-        }}
-      >
-        <img
-          className={styles.logo}
-          src="/assets/images/2.png"
-          alt="sweetlogo"
-        />
-      </div>
-      <div className={styles.splash_links}>
-        <a
-          className="splash navbar_links navbar_link_about"
-          id="about"
-          href="http://sdkag.github.io"
-        >
-          about
-        </a>
-        <div
-          className="splash navbar_links navbar_link_login"
-          id="login"
-          onClick={onclick}
-        >
-          login
-        </div>
-        <div
-          className="splash navbar_links navbar_link_signup"
-          id="signup"
-          onClick={onclick}
-        >
-          signup
-        </div>
-      </div>
-    </div>
+  return (
+    <>
+      <nav>
+        <ul>
+          <span className="left">
+            <NavbarLI onlyPrivate={false} onlyPublic={false}>
+              <NavLink
+                to={loggedIn ? "/" : "/splash"}
+                exact={true}
+                activeClassName="active"
+              >
+                {homeSvg}
+              </NavLink>
+            </NavbarLI>
+          </span>
+          <span className="right">
+            <NavbarLI onlyPrivate={true}>
+              <NavLink to="/interests" exact={true} activeClassName="active">
+                Interests
+              </NavLink>
+            </NavbarLI>
+            <NavbarLI onlyPublic={true}>
+              <LoginButton
+                onClick={() => {
+                  debugger;
+                  setModal("login");
+                }}
+              />
+            </NavbarLI>
+            <NavbarLI onlyPublic={true}>
+              <SignupButton onClick={() => setModal("signup")} />
+            </NavbarLI>
+            <NavbarLI onlyPublic={true}>
+              <button
+                onClick={async () => {
+                  const user = await loginDemo();
+                  localStorage.setItem("user", JSON.stringify(user));
+                  localStorage.setItem("token", user.token);
+                  setUser(user);
+                }}
+              >
+                Demo Login
+              </button>
+              {/* <DemoLoginButton onClick={(){/> */}
+            </NavbarLI>
+            <NavbarLI onlyPrivate={true}>
+              <button
+                onClick={async () => {
+                  debugger;
+                  localStorage.clear();
+                  setUser(null);
+                }}
+              >
+                logout
+              </button>
+              <LogoutButton />
+            </NavbarLI>
+          </span>
+        </ul>
+      </nav>
+    </>
   );
-};
-
-export default Navbar;
+}

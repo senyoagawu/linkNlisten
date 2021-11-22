@@ -3,8 +3,9 @@ import { AppContext } from "../App";
 import styles from "./Views/Home.module.css";
 
 const Sidebar = ({ setModal }) => {
+  debugger;
   const {
-    state: { posts, individualPosts, user, interests },
+    state: { posts, individualPosts, loggedIn, user, interests },
   } = useContext(AppContext);
 
   console.log(interests);
@@ -14,14 +15,13 @@ const Sidebar = ({ setModal }) => {
       whichModal: e.target.id,
     });
   };
-  const titleize = (str) =>
-    str
-      .split("")
-      .map((char, i) => (i === 0 ? char.toUpperCase() : char.toLowerCase()))
-      .join("");
+  const titleize = (str) => str;
+  // .split("")
+  // .map((char, i) => (i === 0 ? char.toUpperCase() : char.toLowerCase()))
+  // .join("");
 
   const edit_profile = () => {};
-  return (
+  return user ? (
     <div className={styles.sidebar_container}>
       <div className={styles.profile_pic_container}>
         <img
@@ -72,7 +72,7 @@ const Sidebar = ({ setModal }) => {
         # of Posts: {individualPosts?.length}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 // bio

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { signupUser } from "../../utils/ajax";
+import { signupUser } from "../../actions/auth";
 import styles from "./Form.module.css";
 
 const Signup = ({ setModal, setUser, setTokenState }) => {
@@ -21,10 +21,7 @@ const Signup = ({ setModal, setUser, setTokenState }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const {
-      access_token,
-      user,
-    } = await signupUser(signupState);
+    const { access_token, user } = await signupUser(signupState);
 
     if (access_token && user) {
       localStorage.access_token = access_token;
@@ -141,4 +138,4 @@ const Signup = ({ setModal, setUser, setTokenState }) => {
   );
 };
 
-export default Signup
+export default Signup;

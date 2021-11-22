@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import SplashSub from "../splash_sub";
-// import { postSessions } from "../../utils/ajax";
+// import { loginUser } from "../../utils/ajax";
 import Signup from "../Forms/SignUp";
 import Login from "../Forms/Login";
 import { AppContext } from "../../App";
@@ -9,7 +9,6 @@ const Splash = (...props) => {
   // const [modalStates, setModal] = useState({
   //   whichModal: undefined,
   // });
-  debugger;
   const {
     modalStates,
     setModal,
@@ -24,8 +23,7 @@ const Splash = (...props) => {
           // setUser={setUser}
           // setTokenState={setTokenState}
         />
-      ) : null}
-      {modalStates.whichModal === "signup" ? (
+      ) : modalStates.whichModal === "signup" ? (
         <Signup
           setModal={setModal}
           // setUser={setUser}

@@ -7,7 +7,7 @@ import Post from "../Forms/CreatePost";
 import styles from "./Home.module.css";
 import Sidebar from "../Sidebar";
 import {
-  getInterestsFollowed,
+  getSubscribedInterests,
   getPosts,
   getIndividualPosts,
 } from "../../utils/ajax";
@@ -35,7 +35,7 @@ const Home = (props) => {
       <EditProfile setModal={setModal} />
       <div className={styles.homepage}>
         <div className={styles.sidebar}>
-          <Sidebar setModal={setModal} />
+          {/* <Sidebar setModal={setModal} /> */}
         </div>
         <div className={styles.posts_container}>
           <PostsContainer setModal={setModal} />
