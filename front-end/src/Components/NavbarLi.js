@@ -30,7 +30,7 @@ export default function NavBarListItem({ onlyPrivate, onlyPublic, children }) {
   };
   // const show = (private, public, loggedIn) => loggedIn ? (public ? false : private ? true: false) : false
 
-  return show(onlyPrivate, onlyPublic, loggedIn()) === true ? (
+  return show(onlyPrivate, onlyPublic, loggedIn) === true ? (
     <li>{children}</li>
   ) : null;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
-import { BrowserRouter, Switch } from "react-router-dom";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
 import * as authActions from "./actions/auth";
 // import {LoginForm, SignUpForm, EditProfileForm}  from "./Components/Pages/Forms";
 // import Login from './Components/Forms/Login'
@@ -44,7 +44,7 @@ export const App = (props) => {
   //   return { user, token, interests, posts };
   // };
 
-  const loggedIn = () => user !== null;
+  const loggedIn = user !== null;
 
   const [state, setState] = useState({
     user,
@@ -100,15 +100,13 @@ export const App = (props) => {
         <Navbar setModal={setModal} loggedIn={loggedIn} />
 
         <Switch>
-          <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn()} />
-
+          <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
           <PrivateRoute
-            exact
             path="/interests"
-            components={Interests}
-            loggedIn={loggedIn()}
+            loggedIn={loggedIn}
+            component={Interests}
           />
-          <PrivateRoute path="/" components={Home} loggedIn={loggedIn()} />
+          <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
         </Switch>
       </AppContext.Provider>
     </BrowserRouter>

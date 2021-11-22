@@ -17,8 +17,6 @@ const Splash = (...props) => {
 
   return (
     <>
-      <h1>hello from splash</h1>
-
       {modalStates.whichModal === "login" ? (
         <Login
           setModal={setModal}
