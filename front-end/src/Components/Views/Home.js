@@ -14,15 +14,13 @@ import {
 import { AppContext } from "../../App";
 
 const Home = (props) => {
-  const [modalStates, setModal] = useState({
+  const [currentModal, setModal] = useState({
     whichModal: undefined,
   });
   const {
-    state,
-    setState,
+    slices: { user, posts },
     stateSetters: { setPosts },
   } = useContext(AppContext);
-  const { user, token, loggedIn } = state;
 
   const updatePosts = async () => {
     if (user === null) return;
@@ -30,7 +28,7 @@ const Home = (props) => {
     setPosts(posts);
   };
 
-  return modalStates.whichModal === "profile" ? (
+  return currentModal.whichModal === "profile" ? (
     <div>
       <EditProfile setModal={setModal} />
       <div className={styles.homepage}>
@@ -42,7 +40,7 @@ const Home = (props) => {
         </div>
       </div>
     </div>
-  ) : modalStates.whichModal === "interests" ? (
+  ) : currentModal.whichModal === "interests" ? (
     <div>
       <Interests setModal={setModal} />
       <div className={styles.homepage}>
@@ -54,7 +52,7 @@ const Home = (props) => {
         </div>
       </div>
     </div>
-  ) : modalStates.whichModal === "post" ? (
+  ) : currentModal.whichModal === "post" ? (
     <div>
       <Post setModal={setModal} />
       <div className={styles.homepage}>

@@ -5,7 +5,7 @@ import styles from "./Post.module.css";
 
 const PostsContainer = ({ setModal }) => {
   const {
-    state: { posts },
+    slices: { posts },
   } = useContext(AppContext);
 
   return (

@@ -7,18 +7,18 @@ export const PrivateRoute = ({ component: Component, loggedIn, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        loggedIn ? <Redirect to="/splash" /> : <Component {...props} />
+        !loggedIn ? <Redirect to="/splash" /> : <Component {...props} />
       }
     />
   );
 };
 
-export const AuthRoute = ({ component: Component, ...rest }) => {
+export const AuthRoute = ({ component: Component, loggedIn, ...rest }) => {
   return (
     <Route
       {...rest}
       render={(props) =>
-        rest.loggedIn ? <Redirect to="/" /> : <Component {...props} />
+        loggedIn ? <Redirect to="/" /> : <Component {...props} />
       }
     />
   );
