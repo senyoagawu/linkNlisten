@@ -98,29 +98,17 @@ export const App = (props) => {
         }}
       >
         <Navbar setModal={setModal} loggedIn={loggedIn} />
-        <Sidebar />
+
         <Switch>
           <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn()} />
 
           <PrivateRoute
             exact
             path="/interests"
-            components={{
-              C1: Sidebar,
-              C2: Interests,
-              C3: Ridebar, // cuz its the right sidebar
-            }}
+            components={Interests}
             loggedIn={loggedIn()}
           />
-          <PrivateRoute
-            path="/"
-            components={{
-              C1: Sidebar,
-              C2: Home,
-              C3: Ridebar, // cuz its the right sidebar
-            }}
-            loggedIn={loggedIn()}
-          />
+          <PrivateRoute path="/" components={Home} loggedIn={loggedIn()} />
         </Switch>
       </AppContext.Provider>
     </BrowserRouter>
