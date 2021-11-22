@@ -7,6 +7,7 @@ import * as authActions from "./actions/auth";
 import Splash from "./Components/Views/Splash";
 import { PrivateRoute, AuthRoute } from "./utils/routes";
 import Home from "./Components/Views/Home";
+import Modal from "./Components/Modal";
 import Sidebar from "./Components/Sidebar";
 import Ridebar from "./Components/Ridebar";
 import Interests from "./Components/Views/Interests";
@@ -30,16 +31,17 @@ export const App = (props) => {
 
   const loggedIn = user !== null;
 
-  const [modalStates, setModal] = useState({
-    whichModal: undefined,
-  });
+  const [currentModal, setModal] = useState(null);
 
   return (
     <BrowserRouter>
       <AppContext.Provider
         value={{
-          setModal,
-          modalStates,
+          ui: {
+            setModal,
+            currentModal,
+          },
+
           slices: {
             user,
             token,
@@ -51,7 +53,7 @@ export const App = (props) => {
         }}
       >
         <Navbar loggedIn={loggedIn} />
-
+        <Modal />
         <Switch>
           <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
           <PrivateRoute
@@ -60,7 +62,6 @@ export const App = (props) => {
             component={Interests}
           />
           <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
-          {/* <Route exact path="/" loggedIn={loggedIn} component={Home} /> */}
         </Switch>
       </AppContext.Provider>
     </BrowserRouter>

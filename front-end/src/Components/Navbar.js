@@ -18,8 +18,7 @@ import {
 
 export default function Navbar() {
   const {
-    modalStates,
-    setModal,
+    ui: { setModal },
     loggedIn,
     stateSetters: { setUser },
     slices: { user },
@@ -30,18 +29,6 @@ export default function Navbar() {
   //   "": null,
   // };
 
-  const onclick = (e) => {
-    setModal({
-      whichModal: e.target.id,
-    });
-  };
-  let history = useHistory();
-
-  const logout = () => {
-    localStorage.clear();
-    setUser(null);
-    // window.location.href = "/splash";
-  };
   return (
     <>
       <nav>
@@ -63,28 +50,29 @@ export default function Navbar() {
                 Interests
               </NavLink>
             </NavbarLI>
-            <NavbarLI onlyPublic={true}>
-              <LoginButton
-                onClick={() => {
-                  setModal("login");
-                }}
-              />
-            </NavbarLI>
-            <NavbarLI onlyPublic={true}>
-              <SignupButton onClick={() => setModal("signup")} />
-            </NavbarLI>
-            <NavbarLI onlyPublic={true}>
-              <button
-                onClick={async () => {
-                  const user = await loginDemo();
-                  localStorage.setItem("user", JSON.stringify(user));
-                  setUser(user);
-                }}
-              >
-                Demo Login
-              </button>
-              {/* <DemoLoginButton onClick={(){/> */}
-            </NavbarLI>
+
+            <NavBarButton
+              onlyPublic={true}
+              text="Login"
+              explanation="Click to login"
+              action={() => setModal("login")}
+            />
+            <NavBarButton
+              onlyPublic={true}
+              text="Signup"
+              explanation="Click to create account"
+              action={() => setModal("signup")}
+            />
+            <NavBarButton
+              onlyPublic={true}
+              text="Demo Login"
+              action={async () => {
+                const user = await loginDemo();
+                localStorage.setItem("user", JSON.stringify(user));
+                setUser(user);
+              }}
+              explanation="Click to login as Demo User"
+            />
             <NavBarButton
               onlyPrivate={true}
               text="Logout"
