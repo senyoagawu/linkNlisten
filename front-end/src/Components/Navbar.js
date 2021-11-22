@@ -9,6 +9,7 @@ import { ProtectedRoute } from "../utils/routes";
 import { loginDemo, logoutUser, loginUser, signupUser } from "../actions/auth";
 import {
   Button,
+  NavBarButton,
   LoginButton,
   SignupButton,
   DemoLoginButton,
@@ -21,6 +22,7 @@ export default function Navbar() {
     setModal,
     loggedIn,
     stateSetters: { setUser },
+    slices: { user },
   } = useContext(AppContext);
   // const modalMap = {
   //   login: <Login setModal={setModal} />,
@@ -37,7 +39,8 @@ export default function Navbar() {
 
   const logout = () => {
     localStorage.clear();
-    window.location.href = "/splash";
+    setUser(null);
+    // window.location.href = "/splash";
   };
   return (
     <>
@@ -63,7 +66,6 @@ export default function Navbar() {
             <NavbarLI onlyPublic={true}>
               <LoginButton
                 onClick={() => {
-                  debugger;
                   setModal("login");
                 }}
               />
@@ -76,7 +78,6 @@ export default function Navbar() {
                 onClick={async () => {
                   const user = await loginDemo();
                   localStorage.setItem("user", JSON.stringify(user));
-                  localStorage.setItem("token", user.token);
                   setUser(user);
                 }}
               >
@@ -84,18 +85,15 @@ export default function Navbar() {
               </button>
               {/* <DemoLoginButton onClick={(){/> */}
             </NavbarLI>
-            <NavbarLI onlyPrivate={true}>
-              <button
-                onClick={async () => {
-                  debugger;
-                  localStorage.clear();
-                  setUser(null);
-                }}
-              >
-                logout
-              </button>
-              <LogoutButton />
-            </NavbarLI>
+            <NavBarButton
+              onlyPrivate={true}
+              text="Logout"
+              explanation="Click to logout"
+              action={async () => {
+                localStorage.clear();
+                setUser(null);
+              }}
+            />
           </span>
         </ul>
       </nav>

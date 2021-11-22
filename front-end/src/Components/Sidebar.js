@@ -3,12 +3,9 @@ import { AppContext } from "../App";
 import styles from "./Views/Home.module.css";
 
 const Sidebar = ({ setModal }) => {
-  debugger;
   const {
-    state: { posts, individualPosts, loggedIn, user, interests },
+    slices: { posts, user, interests },
   } = useContext(AppContext);
-
-  console.log(interests);
 
   const onclick = (e) => {
     setModal({
@@ -68,9 +65,9 @@ const Sidebar = ({ setModal }) => {
       <div className={styles.num_interests_created}>
         # of Created Interests: {interests?.created?.length}
       </div>
-      <div className={styles.num_posts}>
+      {/* <div className={styles.num_posts}>
         # of Posts: {individualPosts?.length}
-      </div>
+      </div> */}
     </div>
   ) : null;
 };

@@ -18,11 +18,9 @@ const Home = (props) => {
     whichModal: undefined,
   });
   const {
-    state,
-    setState,
+    slices: { user, posts },
     stateSetters: { setPosts },
   } = useContext(AppContext);
-  const { user, token, loggedIn } = state;
 
   const updatePosts = async () => {
     if (user === null) return;

@@ -1,37 +1,18 @@
-import React, { useState, useContext } from "react";
-import SplashSub from "../splash_sub";
-// import { loginUser } from "../../utils/ajax";
-import Signup from "../Forms/SignUp";
-import Login from "../Forms/Login";
-import { AppContext } from "../../App";
+import styles from "../Splash.module.css";
 
-const Splash = (...props) => {
-  // const [modalStates, setModal] = useState({
-  //   whichModal: undefined,
-  // });
-  const {
-    modalStates,
-    setModal,
-    state: { loggedIn },
-  } = useContext(AppContext);
-
+const Splash = () => {
   return (
-    <>
-      {modalStates.whichModal === "login" ? (
-        <Login
-          setModal={setModal}
-          // setUser={setUser}
-          // setTokenState={setTokenState}
-        />
-      ) : modalStates.whichModal === "signup" ? (
-        <Signup
-          setModal={setModal}
-          // setUser={setUser}
-          // setTokenState={setTokenState}
-        />
-      ) : null}
-      <SplashSub setModal={setModal} />
-    </>
+    <div className={styles.splash_container}>
+      <div className={styles.main_left}>
+        <img src="/assets/images/1.png" alt="sweetlogo" />
+      </div>
+
+      <div className={styles.main_right}>
+        <p>meet pundits</p>
+        <p>make friends</p>
+        <p>move the nation</p>
+      </div>
+    </div>
   );
 };
 export default Splash;
