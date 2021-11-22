@@ -17,5 +17,5 @@ export default function Modal() {
 
   const Form = forms[currentModal];
 
-  return Form && <Form />;
+  return currentModal ? <Form setModal={setModal} setUser={setUser} /> : null;
 }

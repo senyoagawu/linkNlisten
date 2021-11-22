@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { loginUser } from "../../actions/auth";
+import { loginDemo, loginUser } from "../../actions/auth";
 import styles from "./Form.module.css";
 
-const Login = ({ setModal }) => {
+const Login = ({ setModal, setUser }) => {
   let history = useHistory();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginState, setLogin] = useState({
@@ -15,29 +15,24 @@ const Login = ({ setModal }) => {
     setModal({});
   };
 
-  const handleSubmit = async (e, payload = undefined) => {
+  const handleSubmit = async (e, payload) => {
     const userCreds = payload || loginState;
     e.preventDefault();
     const { access_token, user } = await loginUser(userCreds);
 
     if (access_token && user) {
       localStorage.access_token = access_token;
-      // setTokenState(access_token);
       localStorage.user = JSON.stringify(user);
-      // setUser(user);
-
+      setModal(null);
+      setUser(user);
       // history.push("/");
-      window.location.href = "/";
     }
-    // console.log('before the push')
-    // console.log('after the push')
   };
 
-  const loginDemoUser = (e) => {
+  const loginDemoUser = async (e) => {
     e.preventDefault();
-    const [password, email] = ["password", "demo@gmail.com"];
-    handleSubmit(e, { password, email });
-    // history.push('/')
+    const { access_token, user } = await loginDemo();
+    handleSubmit(e, { password: "password", email: "demo@gmail.com" });
   };
 
   const onchange = (e) => {
@@ -52,7 +47,7 @@ const Login = ({ setModal }) => {
   const signUp = (e) => {
     e.preventDefault();
 
-    setModal({ whichModal: "signup" });
+    setModal("signup");
   };
 
   const togglePassword = (e) => {

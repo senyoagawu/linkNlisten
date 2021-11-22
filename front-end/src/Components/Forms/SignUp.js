@@ -21,21 +21,22 @@ const Signup = ({ setModal, setUser, setTokenState }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    debugger;
     const { access_token, user } = await signupUser(signupState);
 
     if (access_token && user) {
       localStorage.access_token = access_token;
-      // setTokenState(access_token);
       localStorage.user = JSON.stringify(user);
-      // setUser(user);
+      setUser(user);
+      setModal(null);
     }
 
-    history.push("/");
+    // history.push("/");
   };
 
   const login = (e) => {
     e.preventDefault();
-    setModal({ whichModal: "login" });
+    setModal("login");
   };
 
   const onchange = (e) => {
