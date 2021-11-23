@@ -28,14 +28,15 @@ export const App = (props) => {
 
   const loggedIn = user !== null;
 
-  debugger;
-
   const [currentModal, setModal] = useState(null);
 
-  useEffect(async () => {
-    const { interests: data } = await getInterests();
-    setInterests(data);
-  });
+  // useEffect(async () => {
+  //   const { interests: data } = await getInterests();
+  //   setInterests(data);
+  // });
+
+  debugger;
+
   return (
     <BrowserRouter>
       <AppContext.Provider
@@ -63,7 +64,7 @@ export const App = (props) => {
             path="/interests"
             loggedIn={loggedIn}
             component={Interests}
-            interests={interests}
+            // interests={interests}
           />
           <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
         </Switch>

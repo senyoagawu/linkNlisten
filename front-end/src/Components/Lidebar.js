@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Lidebar({ entities }) {
+export default function Sidebar({ entities }) {
   return (
     <ul>
       {entities.map((thing) => (

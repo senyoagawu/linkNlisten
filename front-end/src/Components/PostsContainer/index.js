@@ -1,16 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../App";
 import Post from "./Post";
 import styles from "./Post.module.css";
+import { getSubscribedPosts } from "../../actions/interests";
 
-const PostsContainer = ({ setModal }) => {
+const PostsContainer = () => {
+  const [posts, setPosts] = useState([]);
   const {
-    slices: { posts },
+    slices: {
+      user: { email },
+    },
   } = useContext(AppContext);
-
+  useEffect(async () => {
+    const { posts } = await getSubscribedPosts(email || null);
+    setPosts(posts);
+  });
   return (
     <div className={styles.inner_container}>
-      {posts?.map((post) => (
+      {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
     </div>

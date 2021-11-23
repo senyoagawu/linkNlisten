@@ -1,20 +1,23 @@
 import React from "react";
 import formatTime from "../../utils/formatTimeAgo";
 
-export default function PostHeader({ post }) {
-  return post ? (
+export default function PostHeader({
+  author: { profile_pic, first_name },
+  created_at,
+}) {
+  return (
     <ul className="post-header">
       <li>
         <img
           className="post_author_image"
-          src={post.author.profile_pic}
+          src={profile_pic}
           alt="profile_pic"
         />
       </li>
       <li>
         <div className="username">
-          <span className="post_author">{post.author.first_name}</span>
-          <span className="posted_at">{formatTime(post.time)}</span>
+          <span className="post_author">{first_name}</span>
+          <span className="posted_at">{formatTime(created_at)}</span>
         </div>
       </li>
       <li>
@@ -27,5 +30,5 @@ export default function PostHeader({ post }) {
         </button>
       </li>
     </ul>
-  ) : null;
+  );
 }

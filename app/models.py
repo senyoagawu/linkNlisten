@@ -116,6 +116,7 @@ class Interest(MixinAsDict, db.Model):  # channels
             "created_at": self.created_at,
             "subscribers": [s.short_dict() for s in self.subscribers],
             "posts": [p.as_dict() for p in self.posts],
+            "creator": self.creator.as_dict(),
         }
 
 

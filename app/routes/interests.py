@@ -1,27 +1,28 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Interest, User
-from flask_login import current_user
+from app.auth import require_auth
 
-# from ..auth import require_auth_jobseeker, require_auth_company
 
 bp = Blueprint("interests", __name__, url_prefix="/api/interests")
 
 
 @bp.route("/")  # fetch all interests
+# @require_auth
 def fetch_interests():
-    interests = [{"name": i.name, "id": i.id} for i in Interest.query.all()]
+    interests = [i.to_dict() for i in Interest.query.all()]
     return {"interests": interests}
 
 
-@bp.route("/subscriptions")  # fetch subscriped interests
-def fetch_subscribed_interests():
+@bp.route("/subscriptions/<string:email>/")  # fetch subscriped interests
+def fetch_subscribed_interests(email):
+    # TODO
+    current_user = User.find_by_email(email)
+
     subscribed_interests = current_user.interests
 
     return {
         "subscriptionIds": [i.id for i in subscribed_interests],
-        "subscribedInterests": [
-            {"name": i.name, "id": i.id} for i in subscribed_interests
-        ],
+        "subscribedInterests": [i.to_dict() for i in subscribed_interests],
     }
 
 

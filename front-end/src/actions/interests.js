@@ -6,8 +6,9 @@ export const getInterests = async () => {
 };
 
 // return interests user is subscribed to
-export const getSubscriptions = async () => {
-  return await myGet("/api/subscriptions");
+export const getSubscriptions = async (email) => {
+  if (email === null) return { subscribedInterests: [], subscriptionIds: [] };
+  return await myGet(`/api/subscriptions/${email}`);
 };
 
 //create a new Interest
@@ -18,4 +19,10 @@ export const addInterest = async (payload) => {
 
 export const deleteInterest = async (payload) => {
   return await myDelete("/api/interests/", payload);
+};
+
+export const getSubscribedPosts = async (email) => {
+  if (email === null) return { posts: [] };
+
+  return await myGet(`/api/posts/interest-feed/${email}`);
 };
