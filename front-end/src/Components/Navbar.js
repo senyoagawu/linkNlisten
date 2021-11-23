@@ -1,20 +1,12 @@
 import React, { useContext } from "react";
 import "./Splash.module.css";
-import { useHistory, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Navbar.module.css";
 import { AppContext } from "../App";
 import NavbarLI from "./NavbarLi";
 import { homeSvg, interestsSvg } from "../svgs";
-import { ProtectedRoute } from "../utils/routes";
-import { loginDemo, logoutUser, loginUser, signupUser } from "../actions/auth";
-import {
-  Button,
-  NavBarButton,
-  LoginButton,
-  SignupButton,
-  DemoLoginButton,
-  LogoutButton,
-} from "./Buttons";
+import { loginDemo } from "../actions/auth";
+import { NavBarButton } from "./Buttons";
 
 export default function Navbar() {
   const {
@@ -23,11 +15,6 @@ export default function Navbar() {
     stateSetters: { setUser },
     slices: { user },
   } = useContext(AppContext);
-  // const modalMap = {
-  //   login: <Login setModal={setModal} />,
-  //   signup: <Signup setModal={setModal} />,
-  //   "": null,
-  // };
 
   return (
     <>

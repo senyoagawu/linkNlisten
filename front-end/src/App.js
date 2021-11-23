@@ -1,9 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import * as authActions from "./actions/auth";
-// import {LoginForm, SignUpForm, EditProfileForm}  from "./Components/Pages/Forms";
-// import Login from './Components/Forms/Login'
-// import Signup from './Components/Views/Signup'
 import Splash from "./Components/Views/Splash";
 import { PrivateRoute, AuthRoute } from "./utils/routes";
 import Home from "./Components/Views/Home";
@@ -11,7 +8,7 @@ import Modal from "./Components/Modal";
 import Sidebar from "./Components/Sidebar";
 import Ridebar from "./Components/Ridebar";
 import Interests from "./Components/Views/Interests";
-// import {getInterests} from './utils/ajax'
+import { getInterests } from "./actions/interests";
 import {
   getSubscribedInterests,
   getPosts,
@@ -31,8 +28,14 @@ export const App = (props) => {
 
   const loggedIn = user !== null;
 
+  debugger;
+
   const [currentModal, setModal] = useState(null);
 
+  useEffect(async () => {
+    const { interests: data } = await getInterests();
+    setInterests(data);
+  });
   return (
     <BrowserRouter>
       <AppContext.Provider
@@ -60,6 +63,7 @@ export const App = (props) => {
             path="/interests"
             loggedIn={loggedIn}
             component={Interests}
+            interests={interests}
           />
           <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
         </Switch>
