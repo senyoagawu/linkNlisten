@@ -45,7 +45,7 @@ const Home = (props) => {
       <Interests setModal={setModal} />
       <div className={styles.homepage}>
         <div className={styles.sidebar}>
-          <Sidebar setModal={setModal} />
+          {/* <Sidebar setModal={setModal} /> */}
         </div>
         <div className={styles.posts_container}>
           <PostsContainer setModal={setModal} />
@@ -57,7 +57,7 @@ const Home = (props) => {
       <Post setModal={setModal} />
       <div className={styles.homepage}>
         <div className={styles.sidebar}>
-          <Sidebar setModal={setModal} />
+          {/* <Sidebar setModal={setModal} /> */}
         </div>
         <div className={styles.posts_container}>
           <PostsContainer setModal={setModal} />
@@ -68,7 +68,7 @@ const Home = (props) => {
     <div>
       <div className={styles.homepage}>
         <div className={styles.sidebar}>
-          <Sidebar setModal={setModal} />
+          {/* <Sidebar setModal={setModal} /> */}
         </div>
         <div className={styles.posts_container}>
           <PostsContainer setModal={setModal} />
