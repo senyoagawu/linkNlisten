@@ -44,52 +44,52 @@ export const editProfile = async (email, data) => {
   return await myPut(`/api/users/${email}/`, data);
 };
 
-export const getInterests = () => {
-  return myGet("/api/interests/");
-};
-// headers: { Authorization: `Bearer ${token}` },
-export const addInterest = async (data) => {
-  console.log(data);
-  return await myPost("/api/interests/", data);
-};
+// export const getInterests = () => {
+//   return myGet("/api/interests/");
+// };
+// // headers: { Authorization: `Bearer ${token}` },
+// export const addInterest = async (data) => {
+//   console.log(data);
+//   return await myPost("/api/interests/", data);
+// };
 
-export const getUsersEmails = () => {
-  return myGet("/api/users");
-};
+// export const getUsersEmails = () => {
+//   return myGet("/api/users");
+// };
 
-export const getSubscribedInterests = (email) => {
-  //!how is this working (asynchronicity)
-  // if (!email) return;
-  // return myGet(`/api/interests/${email}/`);
-};
+// export const getSubscribedInterests = (email) => {
+//   //!how is this working (asynchronicity)
+//   // if (!email) return;
+//   // return myGet(`/api/interests/${email}/`);
+// };
 
-export const followInterest = (email, id) => {
-  return myPost(`/api/interests_users/${email}/${id}/`);
-};
-export const unfollowInterest = (email, id) => {
-  return myDelete(`/api/interests_users/${email}/${id}/`);
-};
+// export const followInterest = (email, id) => {
+//   return myPost(`/api/interests_users/${email}/${id}/`);
+// };
+// export const unfollowInterest = (email, id) => {
+//   return myDelete(`/api/interests_users/${email}/${id}/`);
+// };
 
-export const getPosts = (email) => {
-  const theGet = myGet(`/api/posts/${email}/`);
-  console.log(theGet);
-  return theGet;
-};
+// export const getPosts = (email) => {
+//   const theGet = myGet(`/api/posts/${email}/`);
+//   console.log(theGet);
+//   return theGet;
+// };
 
-export const getIndividualPosts = (email) => {
-  return myGet(`/api/posts/individual/${email}/`);
-};
+// export const getIndividualPosts = (email) => {
+//   return myGet(`/api/posts/individual/${email}/`);
+// };
 
-export const createPost = (data) => {
-  console.log(data);
-  return myPost(`/api/posts/`, data);
-};
+// export const createPost = (data) => {
+//   console.log(data);
+//   return myPost(`/api/posts/`, data);
+// };
 
-export const editPost = (postId, userId, data) => {
-  console.log(postId, userId, data);
-  return myPut(`/api/posts/${postId}/${userId}`, data);
-};
+// export const editPost = (postId, userId, data) => {
+//   console.log(postId, userId, data);
+//   return myPut(`/api/posts/${postId}/${userId}`, data);
+// };
 
-export const deletePost = (postId, userId) => {
-  return myDelete(`/api/posts/${postId}/${userId}`);
-};
+// export const deletePost = (postId, userId) => {
+//   return myDelete(`/api/posts/${postId}/${userId}`);
+// };

@@ -1,18 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../App";
 import Post from "./Post";
 import styles from "./Post.module.css";
+import { getSubscribedPosts } from "../../actions/interests";
 
-const PostsContainer = ({ setModal }) => {
+const PostsContainer = ({ posts }) => {
   const {
-    slices: { posts },
+    slices,
+    slices: {
+      user: { email },
+    },
   } = useContext(AppContext);
 
   return (
     <div className={styles.inner_container}>
-      {posts?.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      {posts && posts.map((post) => <Post key={post.id} post={post} />)}
     </div>
   );
 };

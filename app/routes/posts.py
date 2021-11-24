@@ -31,6 +31,23 @@ def fetch_posts_with_follows(email):
     return {"posts": res}
 
 
+@bp.route("/interest-feed/<string:email>/")
+def fetch_interest_feed_posts(email):
+    """
+    fetches the posts ordered by created_at limited by 15
+    for all subscribed interests
+    """
+    current_user = User.find_by_email(email)
+    interest_ids = [i.id for i in current_user.interests]
+    posts = (
+        Post.query.filter(Post.interests_id.in_(interest_ids))
+        .order_by(Post.created_at.desc())
+        .limit(15)
+        .all()
+    )
+    return {"posts": [p.to_dict() for p in posts]}
+
+
 @bp.route("/individual/<string:email>/")
 def fetch_users_posts(email):
     """
@@ -58,4 +75,4 @@ def add_post():
     db.session.commit()
     # fetch_posts_with_follows(email)
 
-    return {"posts": user.posts}
+    return {"posts": current_user.posts}

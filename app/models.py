@@ -64,8 +64,16 @@ class User(MixinAsDict, db.Model):
     reactions = db.relationship("Reaction", back_populates="author")
     created_interests = db.relationship("Interest", back_populates="creator")
 
-    def createdInterests(self):
-        Interest.query.filter(users)
+    def short_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "bio": self.bio,
+            "profile_pic": self.profile_pic,
+            "location": self.location,
+        }
 
 
 class InterestUser(MixinAsDict, db.Model):
@@ -94,30 +102,31 @@ class Interest(MixinAsDict, db.Model):  # channels
         db.DateTime(timezone=True), onupdate=func.now(), nullable=False
     )
     creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
     subscribers = db.relationship(
         "User", secondary="interests_users", back_populates="interests"
     )
-
     creator = db.relationship("User", back_populates="created_interests")
+    posts = db.relationship("Post", back_populates="interest")
 
-    created_at = db.Column(
-        db.DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
-    updated_at = db.Column(
-        db.DateTime(timezone=True), onupdate=func.now(), nullable=False
-    )
-    creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    subscribers = db.relationship(
-        "User", secondary="interests_users", back_populates="interests"
-    )
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "created_at": self.created_at,
+            "subscribers": [s.short_dict() for s in self.subscribers],
+            "posts": [p.as_dict() for p in self.posts],
+            "creator": self.creator.as_dict(),
+        }
 
 
+# posts to an interest group
 class Post(MixinAsDict, db.Model):
     __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True)
     authors_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    # walls_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    interests_id = db.Column(db.ForeignKey("interests.id"))
     body = db.Column(db.String(255), nullable=False)
     created_at = db.Column(
         db.DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -129,10 +138,19 @@ class Post(MixinAsDict, db.Model):
     # comments = db.relationship('Comment', back_populates='post')
     author = db.relationship("User", back_populates="posts")
     reactions = db.relationship("Reaction", back_populates="post")
+    interest = db.relationship("Interest", back_populates="posts")
     # recipient = db.relationship('User')
 
     def to_dict(self):
-        return self.as_dict(skip=["authors_id", "created_at", "updated_at"])
+        return {
+            "id": self.id,
+            "body": self.body,
+            "author": self.author.as_dict(),
+            "created_at": self.created_at,
+            "interest": self.interest.as_dict(),
+            # "reactions": [r.as_dict() for r in self.reactions]
+        }
+        self.as_dict(skip=["authors_id", "created_at", "updated_at"])
 
 
 # class Comment(MixinAsDict, db.Model):
@@ -205,7 +223,7 @@ class Reaction(MixinAsDict, db.Model):
 #     requesters_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 #     accepters_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 #     status_accepted = db.Column(db.Boolean, default=False, nullable=False)
-#     created_at = db.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
+#     created_at = dbp.Column(db.DateTime(timezone=True), onupdate=func.now(), nullable=False)
 
 
 # class Message(MixinAsDict, db.Model):

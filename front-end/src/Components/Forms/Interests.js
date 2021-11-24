@@ -6,7 +6,7 @@ import {
   addInterest,
   followInterest,
   unfollowInterest,
-} from "../../utils/ajax";
+} from "../../actions/interests";
 
 const Interests = ({ setModal }) => {
   const {

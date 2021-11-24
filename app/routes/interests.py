@@ -1,17 +1,32 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Interest, User
-# from ..auth import require_auth_jobseeker, require_auth_company
-
-bp = Blueprint("interests", __name__, url_prefix='/api/interests')
+from app.auth import require_auth
 
 
-@bp.route('/')  # fetch all interests
+bp = Blueprint("interests", __name__, url_prefix="/api/interests")
+
+
+@bp.route("/")  # fetch all interests
+# @require_auth
 def fetch_interests():
-    interests = [{'name': i.name, 'id': i.id} for i in Interest.query.all()]
-    return {'interests': interests}
+    interests = [i.to_dict() for i in Interest.query.all()]
+    return {"interests": interests}
 
 
-@bp.route('/<string:email>/')  # fetch all interests, with user follows data
+@bp.route("/subscriptions/<string:email>/")  # fetch subscriped interests
+def fetch_subscribed_interests(email):
+    # TODO
+    current_user = User.find_by_email(email)
+
+    subscribed_interests = current_user.interests
+
+    return {
+        "subscriptionIds": [i.id for i in subscribed_interests],
+        "subscribedInterests": [i.to_dict() for i in subscribed_interests],
+    }
+
+
+@bp.route("/<string:email>/")  # fetch all interests, with user follows data
 def fetch_interests_with_follows(email):
     # int_joins = [ij for ij in Intr]
     user = User.find_by_email(email)
@@ -21,31 +36,25 @@ def fetch_interests_with_follows(email):
     # print(user_interests, 11 in user_interests)
     followed_interests_ids = [fi.id for fi in followed_interests]
     interests = {
-        i.id: [
-            i.name, i.id in
-            followed_interests_ids
-            ] for i in Interest.query.all()
-        }
+        i.id: [i.name, i.id in followed_interests_ids] for i in Interest.query.all()
+    }
 
     return {
-        'interests': {
+        "interests": {
             "all_interests": interests,
             "followed": [i.as_dict() for i in followed_interests],
-            "created": [i.as_dict() for i in created_interests]
+            "created": [i.as_dict() for i in created_interests],
         }
     }
 
 
-@bp.route('/', methods=["POST"], strict_slashes=False)  # add new interest
+@bp.route("/", methods=["POST"], strict_slashes=False)  # add new interest
 def add_interest():
     data = request.json
-    userId = User.find_by_email(data['email']).id
+    userId = User.find_by_email(data["email"]).id
     print(f"\n\n\nDATA\n{data}\n\n\n")
     interest = Interest(
-        name=data['name'],
-        created_at='now',
-        updated_at='now',
-        creators_id=userId
+        name=data["name"], created_at="now", updated_at="now", creators_id=userId
     )
     db.session.add(interest)
     db.session.commit()
