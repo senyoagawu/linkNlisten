@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 // import {NavBar} from "../Navbar";
 import styles from "./Form.module.css";
 // import { uploadImage } from "../../uploadImage";
-import { createPost } from "../../utils/ajax";
+import { createPost } from "../../actions/posts";
 import { AppContext } from "../../App";
 
 const Post = ({ setModal }) => {

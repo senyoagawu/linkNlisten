@@ -7,14 +7,19 @@ import { getSubscribedPosts } from "../../actions/interests";
 const PostsContainer = () => {
   const [posts, setPosts] = useState([]);
   const {
+    slices,
     slices: {
       user: { email },
     },
   } = useContext(AppContext);
-  useEffect(async () => {
-    const { posts } = await getSubscribedPosts(email || null);
-    setPosts(posts);
-  });
+  useEffect(
+    () =>
+      (async () => {
+        const { posts } = await getSubscribedPosts(email || null);
+        setPosts(posts);
+      })(),
+    [email]
+  );
   return (
     <div className={styles.inner_container}>
       {posts.map((post) => (

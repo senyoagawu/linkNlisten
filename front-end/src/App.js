@@ -35,8 +35,6 @@ export const App = (props) => {
   //   setInterests(data);
   // });
 
-  debugger;
-
   return (
     <BrowserRouter>
       <AppContext.Provider

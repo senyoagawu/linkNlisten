@@ -10,7 +10,7 @@ import {
   getSubscribedInterests,
   getPosts,
   getIndividualPosts,
-} from "../../utils/ajax";
+} from "../../actions/posts";
 import { AppContext } from "../../App";
 
 const Home = (props) => {

@@ -21,7 +21,6 @@ const Signup = ({ setModal, setUser, setTokenState }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    debugger;
     const { access_token, user } = await signupUser(signupState);
 
     if (access_token && user) {

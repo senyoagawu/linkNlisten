@@ -4,7 +4,7 @@ import Lidebar from "../Sidebar";
 import PostsContainer from "../PostsContainer";
 import { getSubscriptions } from "../../actions/interests";
 import { AppContext } from "../../App";
-export default function InterestsPage({ allInterests }) {
+export default function InterestsPage({ allInterests = [] }) {
   const {
     slices: {
       user: { email },
@@ -13,16 +13,21 @@ export default function InterestsPage({ allInterests }) {
 
   const [suggestedInterests, setSuggestedInterests] = useState([]);
   const [subscribedInterests, setSubscribedInterests] = useState([]);
-  useEffect(async () => {
-    const { subscribedInterests, subscriptionIds } = await getSubscriptions(
-      email || null
-    );
-    suggestedInterests = allInterests.filter(
-      (interest) => !subscriptionIds.includes(interest.id)
-    );
-    setSuggestedInterests(suggestedInterests);
-    setSubscribedInterests(subscribedInterests);
-  });
+
+  // useEffect(
+  //   () =>
+  //     (async () => {
+  //       const { subscribed, subscriptionIds } = await getSubscriptions(
+  //         email || null
+  //       );
+  //       const suggested = allInterests.filter(
+  //         (interest) => !subscriptionIds.includes(interest.id)
+  //       );
+  //       setSuggestedInterests(suggested);
+  //       setSubscribedInterests(subscribed);
+  //     })(),
+  //   [email]
+  // );
   return (
     <div>
       <Lidebar interests={subscribedInterests} />
