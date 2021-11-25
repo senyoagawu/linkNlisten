@@ -5,74 +5,56 @@ import Interests from "../Forms/Interests";
 import PostsContainer from "../PostsContainer/";
 import Post from "../Forms/CreatePost";
 import styles from "./Home.module.css";
-import Sidebar from "../Sidebar";
+import Lidebar from "../Sidebar";
 import {
   getSubscribedInterests,
   getPosts,
   getIndividualPosts,
 } from "../../actions/posts";
+import {
+  getSubscriptions,
+  getSubscribedPosts,
+} from "../../actions/interests.js";
 import { AppContext } from "../../App";
 
-const Home = (props) => {
-  const [currentModal, setModal] = useState({
-    whichModal: undefined,
-  });
+//
+const Home = ({ allInterests = [] }) => {
   const {
-    slices: { user, posts },
+    slices: { posts },
     stateSetters: { setPosts },
   } = useContext(AppContext);
 
-  const updatePosts = async () => {
-    if (user === null) return;
-    const { posts } = await getPosts(user.email);
-    setPosts(posts);
-  };
+  // update these to ttake chats
+  const [subscribedInterests, setSubscribedInterests] = useState([]);
+  const [subscribedPosts, setSuscribedPosts] = useState([]);
 
-  return currentModal.whichModal === "profile" ? (
-    <div>
-      <EditProfile setModal={setModal} />
-      <div className={styles.homepage}>
-        <div className={styles.sidebar}>
-          {/* <Sidebar setModal={setModal} /> */}
-        </div>
-        <div className={styles.posts_container}>
-          <PostsContainer setModal={setModal} />
-        </div>
-      </div>
-    </div>
-  ) : currentModal.whichModal === "interests" ? (
-    <div>
-      <Interests setModal={setModal} />
-      <div className={styles.homepage}>
-        <div className={styles.sidebar}>
-          {/* <Sidebar setModal={setModal} /> */}
-        </div>
-        <div className={styles.posts_container}>
-          <PostsContainer setModal={setModal} />
-        </div>
-      </div>
-    </div>
-  ) : currentModal.whichModal === "post" ? (
-    <div>
-      <Post setModal={setModal} />
-      <div className={styles.homepage}>
-        <div className={styles.sidebar}>
-          {/* <Sidebar setModal={setModal} /> */}
-        </div>
-        <div className={styles.posts_container}>
-          <PostsContainer setModal={setModal} />
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div>
-      <div className={styles.homepage}>
-        <div className={styles.sidebar}>
-          {/* <Sidebar setModal={setModal} /> */}
-        </div>
-        <div className={styles.posts_container}>
-          <PostsContainer setModal={setModal} />
-        </div>
+  useEffect(() => {
+    async function fetchInterestsAndPosts() {
+      const { user } = JSON.parse(localStorage.getItem("user"));
+      const { subscribedInterests: subscribed, subscriptionIds } =
+        await getSubscriptions(user.email || null);
+      const { posts: subscribedPosts } = await getSubscribedPosts(
+        user.email || null
+      );
+      const data1 = await getSubscriptions(user.email || null);
+      const data2 = await getSubscribedPosts(user.email || null);
+      setSubscribedInterests(subscribed);
+      setSuscribedPosts(subscribedPosts);
+    }
+    fetchInterestsAndPosts();
+  }, []);
+
+  // const updatePosts = async () => {
+  //   if (user === null) return;
+  //   const { posts } = await getPosts(user.email);
+  //   setPosts(posts);
+  // };
+  //TODO change lidebar to hangdle chats instead
+  return (
+    <div className={styles.homepage}>
+      <Lidebar heading="Interests" iterables={subscribedInterests} />
+      <div className={styles.posts_container}>
+        <PostsContainer posts={subscribedPosts} />
       </div>
     </div>
   );

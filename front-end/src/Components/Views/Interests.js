@@ -32,7 +32,7 @@ export default function InterestsPage({ allInterests = [] }) {
   }, [email]);
   return (
     <div>
-      <Lidebar header="My Interests" interests={subscribedInterests} />
+      <Lidebar heading="My Interests" iterables={subscribedInterests} />
       <PostsContainer posts={subscribedPosts} />
       <Ridebar suggestedInterests={suggestedInterests} />
     </div>

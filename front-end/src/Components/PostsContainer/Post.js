@@ -6,13 +6,13 @@ import PostHeader from "./PostHeader";
 import PostBody from "./PostBody";
 
 const Post = ({ post }) => {
-  return (
+  return post ? (
     <div className="postWrapper">
       <PostHeader post={post} />
       <PostBody body={post.body} />
       {/* <Reactions/>  */}
     </div>
-  );
+  ) : null;
 };
 
 export default Post;

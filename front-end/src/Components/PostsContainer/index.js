@@ -12,6 +12,7 @@ const PostsContainer = ({ posts }) => {
     },
   } = useContext(AppContext);
 
+  console.log("posts ====>", posts);
   return (
     <div className={styles.inner_container}>
       {posts && posts.map((post) => <Post key={post.id} post={post} />)}

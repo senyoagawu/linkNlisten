@@ -2,8 +2,10 @@ import React from "react";
 import formatTime from "../../utils/formatTimeAgo";
 
 export default function PostHeader({
-  author: { profile_pic, first_name },
-  created_at,
+  post: {
+    author: { profile_pic, first_name },
+    created_at,
+  },
 }) {
   return (
     <ul className="post-header">
