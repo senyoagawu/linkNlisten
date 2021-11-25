@@ -16,6 +16,7 @@ import {
 } from "./utils/ajax";
 import Navbar from "./Components/Navbar";
 export const AppContext = createContext();
+export const TabContext = createContext();
 
 export const App = (props) => {
   const defaultUser = () =>
@@ -30,6 +31,7 @@ export const App = (props) => {
 
   const [currentModal, setModal] = useState(null);
 
+  const [selectedTab, setSelectedTab] = useState("posts");
   // useEffect(async () => {
   //   const { interests: data } = await getInterests();
   //   setInterests(data);
@@ -57,14 +59,30 @@ export const App = (props) => {
         <Navbar loggedIn={loggedIn} />
         <Modal />
         <Switch>
-          <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
-          <PrivateRoute
-            path="/interests"
-            loggedIn={loggedIn}
-            component={Interests}
-            // interests={interests}
-          />
-          <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
+          <TabContext.Provider
+            value={{
+              selectedTab,
+              setSelectedTab,
+            }}
+          >
+            <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
+            <PrivateRoute
+              exact
+              path="/interests"
+              loggedIn={loggedIn}
+              component={Interests}
+              // interests={interests}
+            />
+            <PrivateRoute
+              exact
+              path="/interests/:interestId"
+              loggedIn={loggedIn}
+              component={Interests}
+
+              // interests={interests}
+            />
+            <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
+          </TabContext.Provider>
         </Switch>
       </AppContext.Provider>
     </BrowserRouter>
