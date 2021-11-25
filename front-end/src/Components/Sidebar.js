@@ -1,75 +1,35 @@
 import React, { useContext } from "react";
 import { AppContext } from "../App";
 import styles from "./Views/Home.module.css";
+import { searchSvg, interestsSvg } from "../svgs";
 
-const Sidebar = ({ setModal }) => {
-  const {
-    slices: { posts, user, interests },
-  } = useContext(AppContext);
-
-  const onclick = (e) => {
-    setModal({
-      whichModal: e.target.id,
-    });
-  };
-  const titleize = (str) => str;
-  // .split("")
-  // .map((char, i) => (i === 0 ? char.toUpperCase() : char.toLowerCase()))
-  // .join("");
-
-  const edit_profile = () => {};
-  return user ? (
-    <div className={styles.sidebar_container}>
-      <div className={styles.profile_pic_container}>
-        <img
-          className={styles.profile_pic}
-          src={user.profile_pic}
-          alt="profile pic"
-        />
+const Sidebar = ({ heading, iterables = [], route = "" }) => {
+  return (
+    <div className={styles.sidebar}>
+      <div>
+        <span>{heading}</span>
+        {interestsSvg}
       </div>
-      <div className={styles.name}>{`${titleize(user.first_name)} ${titleize(
-        user.last_name
-      )}`}</div>
-      <div className={styles.bio}>{user.bio}</div>
-      <div className={styles.location}>{user.location}</div>
-      <div className={styles.button}>
-        <button
-          id="profile"
-          className={styles.edit_profile_button}
-          onClick={onclick}
-        >
-          Edit Profile
-        </button>
+      <div className="search">
+        <input type="text" placeholder={`search ${route.toLowerCase()}`} />
+        {searchSvg}
       </div>
-      <div className={styles.button}>
-        <button
-          id="interests"
-          className={styles.edit_profile_button}
-          onClick={onclick}
-        >
-          Edit Interests
-        </button>
-      </div>
-      <div className={styles.button}>
-        <button
-          id="post"
-          className={styles.create_post_button}
-          onClick={onclick}
-        >
-          Create a Post
-        </button>
-      </div>
-      <div className={styles.num_interests}>
-        # of Interests: {interests?.followed?.length}
-      </div>
-      <div className={styles.num_interests_created}>
-        # of Created Interests: {interests?.created?.length}
-      </div>
-      {/* <div className={styles.num_posts}>
-        # of Posts: {individualPosts?.length}
-      </div> */}
+      <ul>
+        {iterables.map((interest, index) => {
+          return (
+            <li key={index}>
+              <img
+                styles={`{width: 30px, height: 30px}`}
+                src={interest.link || "https://i.imgur.com/yGEyOfa.jpeg"}
+                alt="interest banner"
+              />
+              <a href={`/${route}/${interest.id}`}>{interest.name}</a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
-  ) : null;
+  );
 };
 
 // bio

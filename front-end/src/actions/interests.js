@@ -8,7 +8,7 @@ export const getInterests = async () => {
 // return interests user is subscribed to
 export const getSubscriptions = async (email) => {
   if (email === null) return { subscribedInterests: [], subscriptionIds: [] };
-  return await myGet(`/api/subscriptions/${email}`);
+  return await myGet(`/api/interests/subscriptions/${email}`);
 };
 
 export const getSubscribedPosts = async (email) => {
