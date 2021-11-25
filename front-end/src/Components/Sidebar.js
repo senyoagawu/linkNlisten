@@ -19,11 +19,11 @@ const Sidebar = ({ heading, iterables = [], route = "" }) => {
           return (
             <li key={index}>
               <img
-                styles={`{width: 30px, height: 30px}`}
+                style={{ width: "30px", height: "30px" }}
                 src={interest.link || "https://i.imgur.com/yGEyOfa.jpeg"}
                 alt="interest banner"
               />
-              <a href={`/${route}/${interest.id}`}>{interest.name}</a>
+              <a href={`/${heading}/${interest.id}`}>{interest.name}</a>
             </li>
           );
         })}
