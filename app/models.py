@@ -77,9 +77,9 @@ class User(MixinAsDict, db.Model):
 
 
 interest_user = db.table(
-    "interest_users",
-    db.Column("users_id", db.Intereger.db.ForeignKey("users.id")),
-    db.Column("interests_id", db.Intereger, db.ForeignKey("interests.id")),
+    "interests_users",
+    db.Column("users_id", db.Integer, db.ForeignKey("users.id")),
+    db.Column("interests_id", db.Integer, db.ForeignKey("interests.id")),
 )
 
 
@@ -104,9 +104,13 @@ class Interest(MixinAsDict, db.Model):  # channels
     creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     subscribers = db.relationship(
-        "User", secondary="interests_users", back_populates="interests"
+        "User", secondary="interests_users", backref="interests"
     )
-    creator = db.relationship("User", back_populates="created_interests")
+    creator = (
+        db.relationship(
+            "User", backref="created_interests", foreign_keys=[creators_id]
+        ),
+    )
     posts = db.relationship("Post", back_populates="interest")
 
     def to_dict(self):

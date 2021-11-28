@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models import db, Interest, User, InterestUser
+from app.models import db, Interest, User
 from app.auth import require_auth
 
 
@@ -68,10 +68,6 @@ def add_interest():
     old_interests = user.interests
     old_interests.append(interest)
     user.interests = old_interests
-    connection = InterestUser(interests_id=interest.id,
-        created_at="now",
-        updated_at="now",mode
-    users_id=user.id)
 
     db.session.add(connection)
     db.session.commit()
