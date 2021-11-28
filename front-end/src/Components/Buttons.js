@@ -7,6 +7,7 @@ export default function Button({
   explanation,
   isDisabled = false,
   action,
+  svg,
 }) {
   const [showExplanation, setShowExplanation] = useState(false);
 
@@ -27,6 +28,7 @@ export default function Button({
           disabled={isDisabled}
         >
           {text}
+          {svg}
         </button>
       </div>
     </div>

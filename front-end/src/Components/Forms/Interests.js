@@ -65,20 +65,6 @@ const Interests = ({ setModal }) => {
       <button className={styles.button} onClick={updateInterests}>
         Update Interests
       </button>
-      <div>
-        <label>Add new Interest</label>
-        <input
-          placeholder="Add new interest"
-          className={styles.inputs}
-          type="text"
-          value={newInterest.name}
-          name="interest"
-          onChange={onchange}
-        />
-        <button className={styles.button} onClick={addNewInterest}>
-          Add
-        </button>
-      </div>
     </div>
   );
 };
