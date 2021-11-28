@@ -75,22 +75,25 @@ class User(MixinAsDict, db.Model):
             "location": self.location,
         }
 
+
 interest_user = db.table(
-    'interst_users',
-    db.Column('users_id', db.Intereger. db.ForeignKey('users.id'))
-    db.Column('interests_id', db.Intereger. db.ForeignKey('interests.id'))
+    "interest_users",
+    db.Column("users_id", db.Intereger.db.ForeignKey("users.id")),
+    db.Column("interests_id", db.Intereger, db.ForeignKey("interests.id")),
 )
-class InterestUser(MixinAsDict, db.Model):
-    __tablename__ = "interests_users"
-    id = db.Column(db.Integer, primary_key=True)
-    users_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    interests_id = db.Column(db.Integer, db.ForeignKey("interests.id"), nullable=False)
-    created_at = db.Column(
-        db.DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
-    updated_at = db.Column(
-        db.DateTime(timezone=True), onupdate=func.now(), nullable=False
-    )
+
+
+# class InterestUser(MixinAsDict, db.Model):
+#     __tablename__ = "interests_users"
+#     id = db.Column(db.Integer, primary_key=True)
+#     users_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+#     interests_id = db.Column(db.Integer, db.ForeignKey("interests.id"), nullable=False)
+#     created_at = db.Column(
+#         db.DateTime(timezone=True), server_default=func.now(), nullable=False
+#     )
+#     updated_at = db.Column(
+#         db.DateTime(timezone=True), onupdate=func.now(), nullable=False
+#     )
 
 
 class Interest(MixinAsDict, db.Model):  # channels

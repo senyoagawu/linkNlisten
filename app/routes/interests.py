@@ -70,7 +70,7 @@ def add_interest():
     user.interests = old_interests
     connection = InterestUser(interests_id=interest.id,
         created_at="now",
-        updated_at="now",
+        updated_at="now",mode
     users_id=user.id)
 
     db.session.add(connection)
