@@ -50,8 +50,8 @@ def fetch_interests_with_follows(email):
 
 @bp.route("/", methods=["POST"], strict_slashes=False)  # add new interest
 def add_interest():
-    data = request.json
-
+    # data = request.json
+    data = request.get_json(force=True)
     print(f"\n\n\nDATA\n{data}\n\n\n")
     interest = Interest(
         name=data["name"],

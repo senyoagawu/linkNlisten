@@ -36,7 +36,7 @@ const Interests = ({ setModal }) => {
       } else {
         await unfollowInterest(email, id);
       }
-      //TODO refactor to this:
+      //TODO refactor to this:c
       // _ = response ? await followInterest(email, id) : await unfollowInterest(email,id)
     }
     setModal({});
