@@ -5,16 +5,16 @@ import { addInterest } from "../../actions/interests";
 
 export default function CreateInterest() {
   const {
-    ui: { setModal },
+    ui: { setModal, setRefresh },
   } = useContext(AppContext);
   const [name, setName] = useState("");
   const creatorsId = JSON.parse(localStorage.getItem("user")).user.id;
 
-  const submitNewInterest = (e) => {
+  const submitNewInterest = async (e) => {
     e.preventDefault();
-    addInterest({ creatorsId, name });
-
+    await addInterest({ creatorsId, name });
     setModal(null);
+    setRefresh((prev) => !prev);
   };
   return (
     <div>

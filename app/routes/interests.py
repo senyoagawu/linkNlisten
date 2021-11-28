@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models import db, Interest, User
+from app.models import db, Interest, User, InterestUser
 from app.auth import require_auth
 
 
@@ -53,13 +53,26 @@ def add_interest():
     # data = request.json
     data = request.get_json(force=True)
     print(f"\n\n\nDATA\n{data}\n\n\n")
+
+    creator_id = data["creatorsId"]
     interest = Interest(
         name=data["name"],
         created_at="now",
         updated_at="now",
-        creators_id=data["creatorsId"],
+        creators_id=creator_id,
     )
     db.session.add(interest)
     db.session.commit()
+    # automatically subscribe to created group
+    user = User.query.get(creator_id)
+    old_interests = user.interests
+    old_interests.append(interest)
+    user.interests = old_interests
+    connection = InterestUser(interests_id=interest.id,
+        created_at="now",
+        updated_at="now",
+    users_id=user.id)
 
+    db.session.add(connection)
+    db.session.commit()
     return interest.as_dict()

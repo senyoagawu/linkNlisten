@@ -27,7 +27,7 @@ const Home = ({ allInterests = [] }) => {
   // update these to ttake chats
   const [subscribedInterests, setSubscribedInterests] = useState([]);
   const [subscribedPosts, setSuscribedPosts] = useState([]);
-
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     async function fetchInterestsAndPosts() {
       const { user } = JSON.parse(localStorage.getItem("user"));
@@ -42,7 +42,7 @@ const Home = ({ allInterests = [] }) => {
       setSuscribedPosts(subscribedPosts);
     }
     fetchInterestsAndPosts();
-  }, []);
+  }, [refresh]);
 
   // const updatePosts = async () => {
   //   if (user === null) return;
@@ -52,9 +52,13 @@ const Home = ({ allInterests = [] }) => {
   //TODO change lidebar to hangdle chats instead
   return (
     <div className={styles.homepage}>
-      <Lidebar heading="Interests" iterables={subscribedInterests} />
+      <Lidebar
+        setRefresh={setRefresh}
+        heading="Interests"
+        iterables={subscribedInterests}
+      />
       <div className={styles.posts_container}>
-        <PostsContainer posts={subscribedPosts} />
+        <PostsContainer setRefresh={setRefresh} posts={subscribedPosts} />
       </div>
     </div>
   );

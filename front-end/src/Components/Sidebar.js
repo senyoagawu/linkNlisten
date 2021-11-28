@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../App";
 import styles from "./Views/Home.module.css";
 import { searchSvg, interestsSvg } from "../svgs";
 import Button from "./Buttons";
 
-const Sidebar = ({ heading, iterables = [], route = "" }) => {
+const Sidebar = ({ setRefresh, heading, iterables = [], route = "" }) => {
   const {
     ui: { setModal },
   } = useContext(AppContext);

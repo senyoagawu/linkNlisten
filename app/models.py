@@ -75,7 +75,11 @@ class User(MixinAsDict, db.Model):
             "location": self.location,
         }
 
-
+interest_user = db.table(
+    'interst_users',
+    db.Column('users_id', db.Intereger. db.ForeignKey('users.id'))
+    db.Column('interests_id', db.Intereger. db.ForeignKey('interests.id'))
+)
 class InterestUser(MixinAsDict, db.Model):
     __tablename__ = "interests_users"
     id = db.Column(db.Integer, primary_key=True)
@@ -94,13 +98,6 @@ class Interest(MixinAsDict, db.Model):  # channels
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False)
-
-    created_at = db.Column(
-        db.DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
-    updated_at = db.Column(
-        db.DateTime(timezone=True), onupdate=func.now(), nullable=False
-    )
     creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     subscribers = db.relationship(
