@@ -4,6 +4,11 @@ from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 # # i'll think about updated_at later, probs don't ever need it.
+interests_users = db.Table(
+    "interests_users",
+    db.Column("users_id", db.Integer, db.ForeignKey("users.id")),
+    db.Column("interests_id", db.Integer, db.ForeignKey("interests.id")),
+)
 
 
 class MixinAsDict:
@@ -57,12 +62,15 @@ class User(MixinAsDict, db.Model):
         print("\n\n\n\n\n\n", email, cls, "\n\n\n\n\n")
         return cls.query.filter(cls.email == email).one()
 
-    interests = db.relationship(
-        "Interest", secondary="interests_users", back_populates="subscribers"
-    )
+    # subscriptions = db.relationship(
+    #     "Interest", secondary=interests_users, backref="subscribers"
+    # )
     posts = db.relationship("Post", back_populates="author")
     reactions = db.relationship("Reaction", back_populates="author")
-    created_interests = db.relationship("Interest", back_populates="creator")
+    # created_interests = db.relationship(
+    #     "Interest",
+    #     back_populates="creator",
+    # )
 
     def short_dict(self):
         return {
@@ -74,13 +82,6 @@ class User(MixinAsDict, db.Model):
             "profile_pic": self.profile_pic,
             "location": self.location,
         }
-
-
-interest_user = db.table(
-    "interests_users",
-    db.Column("users_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("interests_id", db.Integer, db.ForeignKey("interests.id")),
-)
 
 
 # class InterestUser(MixinAsDict, db.Model):
@@ -102,26 +103,37 @@ class Interest(MixinAsDict, db.Model):  # channels
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False)
     creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    created_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
 
     subscribers = db.relationship(
-        "User", secondary="interests_users", backref="interests"
+        "User", secondary="interests_users", backref="subscriptions"
     )
-    creator = (
-        db.relationship(
-            "User", backref="created_interests", foreign_keys=[creators_id]
-        ),
+    creator = db.relationship(
+        "User", backref="created_interests", foreign_keys=[creators_id]
     )
+
     posts = db.relationship("Post", back_populates="interest")
 
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
-            "created_at": self.created_at,
             "subscribers": [s.short_dict() for s in self.subscribers],
             "posts": [p.as_dict() for p in self.posts],
             "creator": self.creator.as_dict(),
         }
+
+
+# interests_users = db.table(
+#     "interests_users",
+#     db.Column("users_id", db.Integer, db.ForeignKey("users.id")),
+#     db.Column("interests_id", db.Integer, db.ForeignKey("interests.id")),
+# )
 
 
 # posts to an interest group
@@ -154,7 +166,7 @@ class Post(MixinAsDict, db.Model):
             "interest": self.interest.as_dict(),
             # "reactions": [r.as_dict() for r in self.reactions]
         }
-        self.as_dict(skip=["authors_id", "created_at", "updated_at"])
+        # self.as_dict(skip=["authors_id", "created_at", "updated_at"])
 
 
 # class Comment(MixinAsDict, db.Model):
