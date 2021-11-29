@@ -16,7 +16,7 @@ def fetch_posts_with_follows(email):
     """
     user = User.find_by_email(email)
 
-    subscribers = [i.subscribers for i in user.interests]
+    subscribers = [i.subscribers for i in user.subscriptions]
     subscribers_ids = [s.id for sub in subscribers for s in sub]  # flatten
     unique_ids = list(set(subscribers_ids))
     unique_ids.append(user.id)
@@ -38,7 +38,7 @@ def fetch_interest_feed_posts(email):
     for all subscribed interests
     """
     current_user = User.find_by_email(email)
-    interest_ids = [i.id for i in current_user.interests]
+    interest_ids = [i.id for i in current_user.subscriptions]
     posts = (
         Post.query.filter(Post.interests_id.in_(interest_ids))
         .order_by(Post.created_at.desc())

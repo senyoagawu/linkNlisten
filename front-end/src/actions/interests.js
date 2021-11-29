@@ -20,6 +20,7 @@ export const getSubscribedPosts = async (email) => {
 //create a new Interest
 // headers: { Authorization: `Bearer ${token}` },
 export const addInterest = async (payload) => {
+  debugger;
   return await myPost("/api/interests/", payload);
 };
 

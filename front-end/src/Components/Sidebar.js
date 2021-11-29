@@ -1,14 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../App";
 import styles from "./Views/Home.module.css";
 import { searchSvg, interestsSvg } from "../svgs";
+import Button from "./Buttons";
 
-const Sidebar = ({ heading, iterables = [], route = "" }) => {
+const Sidebar = ({ setRefresh, heading, iterables = [], route = "" }) => {
+  const {
+    ui: { setModal },
+  } = useContext(AppContext);
+  console.log(setModal);
+
   return (
     <div className={styles.sidebar}>
       <div>
         <span>{heading}</span>
-        {interestsSvg}
+        <Button
+          style={{ width: 30, height: 30 }}
+          onClick={() => setModal("createInterest")}
+          svg={interestsSvg}
+          action={() => setModal("createInterest")}
+        />
       </div>
       <div className="search">
         <input type="text" placeholder={`search ${route.toLowerCase()}`} />
