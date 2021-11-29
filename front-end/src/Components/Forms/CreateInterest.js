@@ -5,7 +5,8 @@ import { addInterest } from "../../actions/interests";
 
 export default function CreateInterest() {
   const {
-    ui: { setModal, setRefresh },
+    ui: { setModal },
+    stateSetters: { setRefresh },
   } = useContext(AppContext);
   const [name, setName] = useState("");
   const creatorsId = JSON.parse(localStorage.getItem("user")).user.id;
