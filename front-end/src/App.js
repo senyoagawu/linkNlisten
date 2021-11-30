@@ -9,6 +9,7 @@ import Sidebar from "./Components/Sidebar";
 import Ridebar from "./Components/Ridebar";
 import Interests from "./Components/Views/Interests";
 import { getInterests } from "./actions/interests";
+import { getUsersList } from "./actions/auth";
 import {
   getSubscribedInterests,
   getPosts,
@@ -16,6 +17,7 @@ import {
 } from "./utils/ajax";
 import Navbar from "./Components/Navbar";
 export const AppContext = createContext();
+export const TabContext = createContext();
 
 export const App = (props) => {
   const defaultUser = () =>
@@ -25,15 +27,27 @@ export const App = (props) => {
   const [posts, setPosts] = useState([]);
   const [interests, setInterests] = useState([]);
   const [token, setToken] = useState(null);
+
+  const [usersList, setUsersList] = useState([]);
+
   const [refresh, setRefresh] = useState(false);
   const loggedIn = user !== null;
 
   const [currentModal, setModal] = useState(null);
 
+  const [selectedTab, setSelectedTab] = useState("posts");
   // useEffect(async () => {
   //   const { interests: data } = await getInterests();
   //   setInterests(data);
   // });
+  useEffect(() => {
+    async function fetchUsersList() {
+      debugger;
+      const users = await getUsersList();
+      setUsersList(users);
+    }
+    fetchUsersList();
+  }, []);
 
   return (
     <BrowserRouter>
@@ -51,6 +65,7 @@ export const App = (props) => {
             loggedIn,
             interests,
             posts,
+            usersList,
           },
 
           stateSetters: {
@@ -65,14 +80,30 @@ export const App = (props) => {
         <Navbar loggedIn={loggedIn} />
         <Modal />
         <Switch>
-          <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
-          <PrivateRoute
-            path="/interests"
-            loggedIn={loggedIn}
-            component={Interests}
-            // interests={interests}
-          />
-          <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
+          <TabContext.Provider
+            value={{
+              selectedTab,
+              setSelectedTab,
+            }}
+          >
+            <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
+            <PrivateRoute
+              exact
+              path="/interests"
+              loggedIn={loggedIn}
+              component={Interests}
+              // interests={interests}
+            />
+            <PrivateRoute
+              exact
+              path="/interests/:interestId"
+              loggedIn={loggedIn}
+              component={Interests}
+
+              // interests={interests}
+            />
+            <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
+          </TabContext.Provider>
         </Switch>
       </AppContext.Provider>
     </BrowserRouter>

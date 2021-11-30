@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
 import Navbar from "../Navbar";
 import EditProfile from "../Forms/EditProfile";
 import Interests from "../Forms/Interests";
@@ -15,7 +16,7 @@ import {
   getSubscriptions,
   getSubscribedPosts,
 } from "../../actions/interests.js";
-import { AppContext } from "../../App";
+import { AppContext, TabContext } from "../../App";
 
 //
 const Home = ({ allInterests = [] }) => {
@@ -31,13 +32,13 @@ const Home = ({ allInterests = [] }) => {
   useEffect(() => {
     async function fetchInterestsAndPosts() {
       const { user } = JSON.parse(localStorage.getItem("user"));
+      //TODO subscriptionIds to calculated suggested subscriptions
       const { subscribedInterests: subscribed, subscriptionIds } =
         await getSubscriptions(user.email || null);
       const { posts: subscribedPosts } = await getSubscribedPosts(
         user.email || null
       );
-      const data1 = await getSubscriptions(user.email || null);
-      const data2 = await getSubscribedPosts(user.email || null);
+
       setSubscribedInterests(subscribed);
       setSuscribedPosts(subscribedPosts);
     }
@@ -53,12 +54,16 @@ const Home = ({ allInterests = [] }) => {
   return (
     <div className={styles.homepage}>
       <Lidebar
+
         setRefresh={setRefresh}
+
         heading="Interests"
         iterables={subscribedInterests}
       />
       <div className={styles.posts_container}>
+
         <PostsContainer setRefresh={setRefresh} posts={subscribedPosts} />
+
       </div>
     </div>
   );

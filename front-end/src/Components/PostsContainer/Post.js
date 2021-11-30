@@ -7,7 +7,7 @@ import PostBody from "./PostBody";
 
 const Post = ({ post }) => {
   return post ? (
-    <div className="postWrapper">
+    <div className={styles.post}>
       <PostHeader post={post} />
       <PostBody body={post.body} />
       {/* <Reactions/>  */}

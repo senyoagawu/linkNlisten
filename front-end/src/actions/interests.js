@@ -7,8 +7,16 @@ export const getInterests = async () => {
 
 // return interests user is subscribed to
 export const getSubscriptions = async (email) => {
+  //private. hence email
   if (email === null) return { subscribedInterests: [], subscriptionIds: [] };
   return await myGet(`/api/interests/subscriptions/${email}`);
+};
+export const getSubscription = async (id) => {
+  //public hend no email (all users should get same return for same route)
+  if (id) {
+    return await myGet(`/api/interests/${id}`);
+  }
+  return { interest: null };
 };
 
 export const getSubscribedPosts = async (email) => {

@@ -6,8 +6,8 @@ bp = Blueprint("users", __name__, url_prefix='/api/users')
 
 @bp.route('/')  # fetch all users
 def fetch_users():
-    users = [u.email for u in User.query.all()]
-    return {'user_emails': users}
+    users = [u.short_dict() for u in User.query.all()]
+    return {'users': users}
 
 
 @bp.route('/<string:email>')  # fetch a single user

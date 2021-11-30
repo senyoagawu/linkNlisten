@@ -1,0 +1,15 @@
+.interestsPage .lidebar {
+	grid-area: 1/2/2/3
+}
+
+.banner {
+	grid-area: 1/3/2/4
+}
+
+.postsContainer {
+	grid-area: 2/ 3 /3/ 4;
+}
+
+.ridebar {
+	grid-area: 2/4/3/4;
+}

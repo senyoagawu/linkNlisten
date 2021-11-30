@@ -21,10 +21,12 @@ const Sidebar = ({ setRefresh, heading, iterables = [], route = "" }) => {
           action={() => setModal("createInterest")}
         />
       </div>
-      <div className="search">
-        <input type="text" placeholder={`search ${route.toLowerCase()}`} />
-        {searchSvg}
-      </div>
+      {searchbar && (
+        <div className="search">
+          <input type="text" placeholder={`search ${route.toLowerCase()}`} />
+          {searchSvg}
+        </div>
+      )}
       <ul>
         {iterables.map((interest, index) => {
           return (
@@ -34,7 +36,7 @@ const Sidebar = ({ setRefresh, heading, iterables = [], route = "" }) => {
                 src={interest.link || "https://i.imgur.com/yGEyOfa.jpeg"}
                 alt="interest banner"
               />
-              <a href={`/${heading}/${interest.id}`}>{interest.name}</a>
+              <a href={`/interests/${interest.id}`}>{interest.name}</a>
             </li>
           );
         })}
