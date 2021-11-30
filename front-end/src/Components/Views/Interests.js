@@ -5,39 +5,41 @@ import Lidebar from "../Sidebar";
 import PostsContainer from "../PostsContainer";
 import { getSubscriptions, getSubscribedPosts } from "../../actions/interests";
 import { AppContext } from "../../App";
+import Banner from "../Banner";
 export default function InterestsPage({ allInterests = [] }) {
   const { interestId } = useParams();
+  const [suggestedInterests, setSuggestedInterests] = useState([]);
+  const [subscribedInterests, setSubscribedInterests] = useState([]);
+  const [allSubscribedPosts, setSuscribedPosts] = useState([]);
+
   const {
     slices: {
       user: { email },
     },
   } = useContext(AppContext);
-
-  const [suggestedInterests, setSuggestedInterests] = useState([]);
-  const [subscribedInterests, setSubscribedInterests] = useState([]);
-  const [subscribedPosts, setSuscribedPosts] = useState([]);
+  // if (interestId) {
+  // } else {
+  // }
 
   useEffect(() => {
     async function fetchInterestsAndPosts() {
       const { user } = JSON.parse(localStorage.getItem("user"));
       const { subscribedInterests: subscribed, subscriptionIds } =
         await getSubscriptions(user.email || null);
-      const { posts: subscribedPosts } = await getSubscribedPosts(
+      const { posts: allSubscribedPosts } = await getSubscribedPosts(
         user.email || null
       );
+      debugger;
       const suggested = allInterests.filter(
         (interest) => !subscriptionIds.includes(interest.id)
       );
       const subscribedObj = {};
-      subscribed.forEach((state, interest) => {
-        subscribedObj[interest.id] = interest;
-        return subscribedObj;
-      });
+      subscribed.forEach((interest) => (subscribedObj[interest.id] = interest));
 
       setSuggestedInterests(suggested);
 
       setSubscribedInterests(subscribedObj);
-      setSuscribedPosts(subscribedPosts);
+      setSuscribedPosts(allSubscribedPosts);
     }
     fetchInterestsAndPosts();
   }, [email]);
@@ -51,17 +53,25 @@ export default function InterestsPage({ allInterests = [] }) {
     }
   };
 
-  console.log(subscribedPosts, relevantPosts(subscribedPosts));
+  console.log(allSubscribedPosts, relevantPosts(allSubscribedPosts));
   return (
-    <div>
-      <Lidebar
-        heading="My Interests"
-        iterables={Object.values(subscribedInterests)}
-      />
+    <div className="interestsPage">
+      <div className="lidebar interestPage">
+        <Lidebar
+          heading="My Interests"
+          iterables={Object.values(subscribedInterests)}
+        />
+      </div>
+      <div className="interestsPage banner">
+        <Banner />
+      </div>
+      <div className="postsContainer  interestsPage">
+        <PostsContainer posts={relevantPosts(allSubscribedPosts)} />
+      </div>
 
-      <PostsContainer posts={relevantPosts(subscribedPosts)} />
-
-      <Ridebar suggestedInterests={suggestedInterests} />
+      <div className="interstsPage ridebar">
+        <Ridebar suggestedInterests={suggestedInterests} />
+      </div>
     </div>
   );
 }
