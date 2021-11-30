@@ -39,8 +39,8 @@ export const App = (props) => {
   // });
   useEffect(() => {
     async function fetchUsersList() {
-      const users = await getUsersList();
       debugger;
+      const users = await getUsersList();
       setUsersList(users);
     }
     fetchUsersList();
