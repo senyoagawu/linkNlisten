@@ -9,6 +9,7 @@ import Sidebar from "./Components/Sidebar";
 import Ridebar from "./Components/Ridebar";
 import Interests from "./Components/Views/Interests";
 import { getInterests } from "./actions/interests";
+import { getUsersList } from "./actions/auth";
 import {
   getSubscribedInterests,
   getPosts,
@@ -26,7 +27,7 @@ export const App = (props) => {
   const [posts, setPosts] = useState([]);
   const [interests, setInterests] = useState([]);
   const [token, setToken] = useState(null);
-
+  const [usersList, setUsersList] = useState([]);
   const loggedIn = user !== null;
 
   const [currentModal, setModal] = useState(null);
@@ -36,6 +37,13 @@ export const App = (props) => {
   //   const { interests: data } = await getInterests();
   //   setInterests(data);
   // });
+  useEffect(() => {
+    async function fetchUsersList() {
+      const { users } = await getUsersList;
+      debugger;
+      setUsersList(users);
+    }
+  }, []);
 
   return (
     <BrowserRouter>
@@ -52,6 +60,7 @@ export const App = (props) => {
             loggedIn,
             interests,
             posts,
+            usersList,
           },
           stateSetters: { setInterests, setPosts, setUser, setToken },
         }}

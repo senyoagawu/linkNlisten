@@ -14,3 +14,10 @@ export const logoutUser = async (data) => {
 export const loginDemo = async () => {
   return await loginUser({ email: "demo@gmail.com", password: "password" });
 };
+
+export const getUsersList = async () => {
+  const { users } = await fetch("/api/users/");
+  const usersObj = {};
+  users.forEach((user) => (usersObj[user.id] = user));
+  return usersObj;
+};

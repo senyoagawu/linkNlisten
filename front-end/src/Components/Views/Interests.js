@@ -3,46 +3,65 @@ import { useParams } from "react-router-dom";
 import Ridebar from "../Sidebar";
 import Lidebar from "../Sidebar";
 import PostsContainer from "../PostsContainer";
-import { getSubscriptions, getSubscribedPosts } from "../../actions/interests";
+import {
+  getSubscriptions,
+  getSubscribedPosts,
+  getSubscription,
+} from "../../actions/interests";
 import { AppContext } from "../../App";
 import Banner from "../Banner";
 export default function InterestsPage({ allInterests = [] }) {
   const { interestId } = useParams();
-  const [suggestedInterests, setSuggestedInterests] = useState([]);
+  // const [suggestedInterests, setSuggestedInterests] = useState([]);
   const [subscribedInterests, setSubscribedInterests] = useState([]);
   const [allSubscribedPosts, setSuscribedPosts] = useState([]);
+  const [oneSubscription, setOneSubscription] = useState(null);
 
-  const {
-    slices: {
-      user: { email },
-    },
-  } = useContext(AppContext);
+  // const {
+  //   slices: {
+  //     user: { email },
+  //   },
+  // } = useContext(AppContext);
   // if (interestId) {
   // } else {
   // }
-
   useEffect(() => {
-    async function fetchInterestsAndPosts() {
-      const { user } = JSON.parse(localStorage.getItem("user"));
-      const { subscribedInterests: subscribed, subscriptionIds } =
-        await getSubscriptions(user.email || null);
-      const { posts: allSubscribedPosts } = await getSubscribedPosts(
-        user.email || null
-      );
-      debugger;
-      const suggested = allInterests.filter(
-        (interest) => !subscriptionIds.includes(interest.id)
-      );
-      const subscribedObj = {};
-      subscribed.forEach((interest) => (subscribedObj[interest.id] = interest));
-
-      setSuggestedInterests(suggested);
-
-      setSubscribedInterests(subscribedObj);
-      setSuscribedPosts(allSubscribedPosts);
+    async function fetchOneSubscription(id) {
+      const { interest } = await getSubscription(id);
+      setOneSubscription(interest);
     }
-    fetchInterestsAndPosts();
-  }, [email]);
+
+    fetchOneSubscription(interestId);
+  }, [interestId]);
+
+  useEffect(
+    () => {
+      async function fetchInterestsAndPosts() {
+        const { user } = JSON.parse(localStorage.getItem("user"));
+        const { subscribedInterests: subscribed, subscriptionIds } =
+          await getSubscriptions(user.email || null);
+        const { posts: allSubscribedPosts } = await getSubscribedPosts(
+          user.email || null
+        );
+        const suggested = allInterests.filter(
+          (interest) => !subscriptionIds.includes(interest.id)
+        );
+        const subscribedObj = {};
+        subscribed.forEach(
+          (interest) => (subscribedObj[interest.id] = interest)
+        );
+
+        // setSuggestedInterests(suggested);
+
+        setSubscribedInterests(subscribedObj);
+        setSuscribedPosts(allSubscribedPosts);
+      }
+      fetchInterestsAndPosts();
+    },
+    [
+      // email
+    ]
+  );
 
   const relevantPosts = (posts) => {
     const relPosts = interestId ? posts[interestId] : Object.values(posts);
@@ -66,11 +85,13 @@ export default function InterestsPage({ allInterests = [] }) {
         <Banner />
       </div>
       <div className="postsContainer  interestsPage">
-        <PostsContainer posts={relevantPosts(allSubscribedPosts)} />
+        <PostsContainer
+          posts={oneSubscription ? oneSubscription.posts : allSubscribedPosts}
+        />
       </div>
 
       <div className="interstsPage ridebar">
-        <Ridebar suggestedInterests={suggestedInterests} />
+        <Ridebar suggestedInterests={allInterests} />
       </div>
     </div>
   );

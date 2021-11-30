@@ -12,6 +12,11 @@ def fetch_interests():
     interests = [i.to_dict() for i in Interest.query.all()]
     return {"interests": interests}
 
+@bp.route('/<int:interest_id>')
+# @require_auth
+def fetch_interest(interest_id):
+    interest = Interest.query.get_or_404(interest_id)
+    return {"interest": interest.to_dict()}
 
 @bp.route("/subscriptions/<string:email>/")  # fetch subscriped interests
 def fetch_subscribed_interests(email):
@@ -42,8 +47,8 @@ def fetch_interests_with_follows(email):
     return {
         "interests": {
             "all_interests": interests,
-            "followed": [i.as_dict() for i in followed_interests],
-            "created": [i.as_dict() for i in created_interests],
+            "followed": [i.to_dict() for i in followed_interests],
+            "created": [i.to_dict() for i in created_interests],
         }
     }
 
