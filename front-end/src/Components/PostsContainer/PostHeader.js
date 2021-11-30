@@ -11,6 +11,7 @@ export default function PostHeader({ post: { created_at, authors_id } }) {
   //   created_at,
   // }
   // const { first_name, profile_pic } =  usersList[authors_id];
+  console.log("users list", usersList);
   return (
     usersList &&
     usersList.length > 0 && (
@@ -19,7 +20,7 @@ export default function PostHeader({ post: { created_at, authors_id } }) {
           <img
             className="post_author_image"
             style={{ height: "50px", width: "50px" }}
-            // src={usersList[authors_id].profile_pic}
+            src={usersList[authors_id].profile_pic}
             alt="profile_pic"
           />
         </li>

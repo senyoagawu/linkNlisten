@@ -8,7 +8,8 @@ import {
   getSubscribedPosts,
   getSubscription,
 } from "../../actions/interests";
-import { AppContext } from "../../App";
+import styles from "./Interests.module.css";
+import { AplpContext } from "../../App";
 import Banner from "../Banner";
 export default function InterestsPage({ allInterests = [] }) {
   const { interestId } = useParams();
@@ -72,26 +73,42 @@ export default function InterestsPage({ allInterests = [] }) {
     }
   };
 
-  console.log(allSubscribedPosts, relevantPosts(allSubscribedPosts));
   return (
-    <div className="interestsPage">
-      <div className="lidebar interestPage">
+    <div
+      className={styles.interestsPage}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "30px 220px 1fr 200px 30px",
+        gridTemplateRows: "400px 1fr",
+        gap: 30,
+        /* border: 7px solid red; */
+      }}
+    >
+      <div className={styles.lidebar}>
         <Lidebar
+          styles={styles}
+          searchbar={true}
           heading="My Interests"
           iterables={Object.values(subscribedInterests)}
         />
       </div>
-      <div className="interestsPage banner">
-        <Banner />
-      </div>
-      <div className="postsContainer  interestsPage">
+      {
+        <div className={styles.banner}>
+          <Banner />
+        </div>
+      }
+      <div className={styles.postsContainer}>
         <PostsContainer
           posts={oneSubscription ? oneSubscription.posts : allSubscribedPosts}
         />
       </div>
 
-      <div className="interstsPage ridebar">
-        <Ridebar suggestedInterests={allInterests} />
+      <div className={styles.ridebar}>
+        <Ridebar
+          searchbar={false}
+          styles={styles}
+          suggestedInterests={allInterests}
+        />
       </div>
     </div>
   );

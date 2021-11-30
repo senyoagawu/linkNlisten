@@ -53,7 +53,11 @@ const Home = ({ allInterests = [] }) => {
   //TODO change lidebar to hangdle chats instead
   return (
     <div className={styles.homepage}>
-      <Lidebar heading="Interests" iterables={subscribedInterests} />
+      <Lidebar
+        styles={styles}
+        heading="Interests"
+        iterables={subscribedInterests}
+      />
       <div className={styles.posts_container}>
         {/*TODO fix this when you got the routerr working. */}
         <PostsContainer posts={subscribedPosts} />

@@ -3,17 +3,25 @@ import { AppContext } from "../App";
 import styles from "./Views/Home.module.css";
 import { searchSvg, interestsSvg } from "../svgs";
 
-const Sidebar = ({ heading, iterables = [], route = "" }) => {
+const Sidebar = ({
+  searchbar,
+  styles,
+  heading,
+  iterables = [],
+  route = "",
+}) => {
   return (
     <div className={styles.sidebar}>
       <div>
         <span>{heading}</span>
         {interestsSvg}
       </div>
-      <div className="search">
-        <input type="text" placeholder={`search ${route.toLowerCase()}`} />
-        {searchSvg}
-      </div>
+      {searchbar && (
+        <div className="search">
+          <input type="text" placeholder={`search ${route.toLowerCase()}`} />
+          {searchSvg}
+        </div>
+      )}
       <ul>
         {iterables.map((interest, index) => {
           return (
