@@ -28,7 +28,7 @@ const Home = ({ allInterests = [] }) => {
   // update these to ttake chats
   const [subscribedInterests, setSubscribedInterests] = useState([]);
   const [subscribedPosts, setSuscribedPosts] = useState([]);
-
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     async function fetchInterestsAndPosts() {
       const { user } = JSON.parse(localStorage.getItem("user"));
@@ -43,7 +43,7 @@ const Home = ({ allInterests = [] }) => {
       setSuscribedPosts(subscribedPosts);
     }
     fetchInterestsAndPosts();
-  }, []);
+  }, [refresh]);
 
   // const updatePosts = async () => {
   //   if (user === null) return;
@@ -54,13 +54,16 @@ const Home = ({ allInterests = [] }) => {
   return (
     <div className={styles.homepage}>
       <Lidebar
-        styles={styles}
+
+        setRefresh={setRefresh}
+
         heading="Interests"
         iterables={subscribedInterests}
       />
       <div className={styles.posts_container}>
-        {/*TODO fix this when you got the routerr working. */}
-        <PostsContainer posts={subscribedPosts} />
+
+        <PostsContainer setRefresh={setRefresh} posts={subscribedPosts} />
+
       </div>
     </div>
   );

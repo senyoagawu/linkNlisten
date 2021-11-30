@@ -4,7 +4,7 @@ from flask_cors import CORS, cross_origin
 
 # from flask_jwt_extended import JWTManager
 from app.config import Configuration
-from app.routes import sessions, users, interests, interests_users, posts
+from app.routes import sessions, users, interests, posts
 from app.models import db
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ migrate = Migrate(app, db)
 app.register_blueprint(sessions.bp)
 app.register_blueprint(users.bp)
 app.register_blueprint(interests.bp)
-app.register_blueprint(interests_users.bp)
+# app.register_blueprint(interests_users.bp)
 app.register_blueprint(posts.bp)
 
 

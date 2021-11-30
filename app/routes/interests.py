@@ -23,7 +23,7 @@ def fetch_subscribed_interests(email):
     # TODO
     current_user = User.find_by_email(email)
 
-    subscribed_interests = current_user.interests
+    subscribed_interests = current_user.subscriptions
 
     return {
         "subscriptionIds": [i.id for i in subscribed_interests],
@@ -36,7 +36,7 @@ def fetch_interests_with_follows(email):
     # int_joins = [ij for ij in Intr]
     user = User.find_by_email(email)
     data = request.json
-    followed_interests = [i for i in user.interests]
+    followed_interests = [i for i in user.subscriptions]
     created_interests = [i for i in user.created_interests]
     # print(user_interests, 11 in user_interests)
     followed_interests_ids = [fi.id for fi in followed_interests]
@@ -55,13 +55,23 @@ def fetch_interests_with_follows(email):
 
 @bp.route("/", methods=["POST"], strict_slashes=False)  # add new interest
 def add_interest():
-    data = request.json
-    userId = User.find_by_email(data["email"]).id
+    # data = request.json
+    data = request.get_json(force=True)
     print(f"\n\n\nDATA\n{data}\n\n\n")
+
+    creator_id = data["creatorsId"]
     interest = Interest(
-        name=data["name"], created_at="now", updated_at="now", creators_id=userId
+        name=data["name"],
+        created_at="now",
+        updated_at="now",
+        creators_id=creator_id,
     )
     db.session.add(interest)
     db.session.commit()
-
+    # automatically subscribe to created group
+    user = User.query.get(creator_id)
+    old_interests = user.subscriptions
+    old_interests.append(interest)
+    user.subscriptions.append(interest)
+    db.session.commit()
     return interest.as_dict()

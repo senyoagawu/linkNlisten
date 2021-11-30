@@ -27,7 +27,10 @@ export const App = (props) => {
   const [posts, setPosts] = useState([]);
   const [interests, setInterests] = useState([]);
   const [token, setToken] = useState(null);
+
   const [usersList, setUsersList] = useState([]);
+
+  const [refresh, setRefresh] = useState(false);
   const loggedIn = user !== null;
 
   const [currentModal, setModal] = useState(null);
@@ -53,6 +56,7 @@ export const App = (props) => {
           ui: {
             setModal,
             currentModal,
+            refresh,
           },
 
           slices: {
@@ -63,7 +67,14 @@ export const App = (props) => {
             posts,
             usersList,
           },
-          stateSetters: { setInterests, setPosts, setUser, setToken },
+
+          stateSetters: {
+            setInterests,
+            setPosts,
+            setUser,
+            setToken,
+            setRefresh,
+          },
         }}
       >
         <Navbar loggedIn={loggedIn} />
