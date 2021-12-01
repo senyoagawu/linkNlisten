@@ -163,7 +163,7 @@ class Post(MixinAsDict, db.Model):
             "body": self.body,
             "author": self.author.as_dict(),
             "created_at": self.created_at,
-            "interest": self.interest.as_dict(),
+            # "interest": self.interest.as_dict(),
             # "reactions": [r.as_dict() for r in self.reactions]
         }
         # self.as_dict(skip=["authors_id", "created_at", "updated_at"])

@@ -66,7 +66,8 @@ def add_post():
     data = request.json
     print(f"\n\n\nDATA\n{data}\n\n\n")
     authorsId = data["authorsId"]
-    User.query.get(authorsId).one_or_404('whoops looks like something went wrong')
+    #todo 404 error
+
 
     post = Post(
         body=data["body"], authors_id=data["authorsId"], created_at="now", updated_at="now"
@@ -84,13 +85,13 @@ def edit_post(postId):
 
     post = Post.query.get(postId)
     post.body = data["body"]
-    post.authors_id=data["authors_id"]
+    post.authors_id=data["authorsId"]
     post.updated_at="now"
 
     db.session.commit()
     # fetch_posts_with_follows(email)
 
-    return {"post": post}
+    return {"post": post.to_dict()}
 
 
 @bp.route("/<int:postId>", methods=["DELETE"], strict_slashes=False)  # add new post
@@ -99,7 +100,7 @@ def delete_post(postId):
     print(f"\n\n\nDATA\n{data}\n\n\n")
 
     post = Post.query.get(postId)
-    if post.authors_id == data["authors_id"]:
+    if post.authors_id == data["authorsId"]:
         db.session.delete(post)
         db.session.commit()
         return {"message": "post deleted"}
