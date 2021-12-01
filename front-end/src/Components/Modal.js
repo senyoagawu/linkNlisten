@@ -7,6 +7,8 @@ const forms = {
   signup: Signup,
   null: null,
   createInterest: CreateInterest,
+  deletePost:
+  editPost:
 };
 export default function Modal() {
   const {

@@ -65,14 +65,50 @@ def fetch_users_posts(email):
 def add_post():
     data = request.json
     print(f"\n\n\nDATA\n{data}\n\n\n")
-    email = data["email"]
-    userId = User.find_by_email(email).id
+    authorsId = data["authorsId"]
+    User.query.get(authorsId).one_or_404('whoops looks like something went wrong')
 
     post = Post(
-        body=data["message"], authors_id=userId, created_at="now", updated_at="now"
+        body=data["body"], authors_id=data["authorsId"], created_at="now", updated_at="now"
     )
     db.session.add(post)
     db.session.commit()
+    #   fetch_posts_with_follows(email)
+
+    return {"posts": post.to_dict()}
+
+@bp.route("/<int:postId>", methods=["PUT"], strict_slashes=False)  # add new post
+def edit_post(postId):
+    data = request.json
+    print(f"\n\n\nDATA\n{data}\n\n\n")
+
+    post = Post.query.get(postId)
+    post.body = data["body"]
+    post.authors_id=data["authors_id"]
+    post.updated_at="now"
+
+    db.session.commit()
     # fetch_posts_with_follows(email)
 
-    return {"posts": current_user.posts}
+    return {"post": post}
+
+
+@bp.route("/<int:postId>", methods=["DELETE"], strict_slashes=False)  # add new post
+def delete_post(postId):
+    data = request.json
+    print(f"\n\n\nDATA\n{data}\n\n\n")
+
+    post = Post.query.get(postId)
+    if post.authors_id == data["authors_id"]:
+        db.session.delete(post)
+        db.session.commit()
+        return {"message": "post deleted"}
+    return {"message": "you are not authorized to delete this post"}
+
+@bp.route("/<int:postId>", strict_slashes=False)  # add new post
+def get_post(postId):
+    data = request.json
+    print(f"\n\n\nDATA\n{data}\n\n\n")
+
+    post = Post.query.get(postId)
+    return {"post": post.to_dict()}
