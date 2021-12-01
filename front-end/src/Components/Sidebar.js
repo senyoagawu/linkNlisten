@@ -4,7 +4,13 @@ import styles from "./Views/Home.module.css";
 import { searchSvg, interestsSvg } from "../svgs";
 import Button from "./Buttons";
 
-const Sidebar = ({ setRefresh, heading, iterables = [], route = "" }) => {
+const Sidebar = ({
+  searchbar,
+  setRefresh,
+  heading,
+  iterables = [],
+  route = "",
+}) => {
   const {
     ui: { setModal },
   } = useContext(AppContext);

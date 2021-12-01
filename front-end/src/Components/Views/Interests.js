@@ -9,7 +9,7 @@ import {
   getSubscription,
 } from "../../actions/interests";
 import styles from "./Interests.module.css";
-import { AplpContext } from "../../App";
+import { AppContext } from "../../App";
 import Banner from "../Banner";
 export default function InterestsPage({ allInterests = [] }) {
   const { interestId } = useParams();
@@ -26,6 +26,7 @@ export default function InterestsPage({ allInterests = [] }) {
   // if (interestId) {
   // } else {
   // }
+  console.log(oneSubscription);
   useEffect(() => {
     async function fetchOneSubscription(id) {
       const { interest } = await getSubscription(id);
@@ -94,16 +95,30 @@ export default function InterestsPage({ allInterests = [] }) {
       </div>
       {
         <div className={styles.banner}>
-          <Banner />
+          {oneSubscription && <Banner interest={oneSubscription} />}
         </div>
       }
-      <div className={styles.postsContainer}>
+      <div
+        className={
+          oneSubscription !== null
+            ? styles.singePostContainer
+            : styles.postsContainer
+        }
+      >
         <PostsContainer
-          posts={oneSubscription ? oneSubscription.posts : allSubscribedPosts}
+          posts={
+            oneSubscription !== null
+              ? oneSubscription.posts
+              : allSubscribedPosts
+          }
         />
       </div>
 
-      <div className={styles.ridebar}>
+      <div
+        className={
+          oneSubscription !== null ? styles.singleRidebar : styles.ridebar
+        }
+      >
         <Ridebar
           searchbar={false}
           styles={styles}

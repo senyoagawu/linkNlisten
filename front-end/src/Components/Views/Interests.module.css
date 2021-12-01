@@ -3,13 +3,22 @@
 }
 
 .banner {
-	grid-area: 1/3/2/4
+	grid-area: 1/3/2/5
 }
 
 .postsContainer {
 	grid-area: 2/ 3 /3/ 4;
 }
 
+
 .ridebar {
 	grid-area: 2/4/3/4;
+}
+
+.singlePostsContainer {
+	grid-area: 1/3/3/4;
+}
+
+.singleRidebar {
+	grid-area: 1/4/3/4;
 }

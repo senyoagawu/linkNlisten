@@ -56,7 +56,7 @@ export const clockSvg = (
 );
 
 export const infoSvg = (
-  <svg id="svg_info" viewBox="22 16 8 19">
+  <svg id="svg_info" viewBox="22 16 8 19" height="24px" width="24px">
     {" "}
     <path
       stroke="currentColor"

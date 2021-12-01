@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { TabContext } from "../../App";
+import "./Tabs.module.css";
 export default function Tabs() {
   const { selectedTab, setSelectedTab } = useContext(TabContext);
   const selectTab = (e) => setSelectedTab(e.target.id);

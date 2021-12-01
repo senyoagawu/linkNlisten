@@ -6,7 +6,13 @@ export default function Header({ interest }) {
   const name = infoActive ? "About" + interest.name : interest.name;
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        backgroundColor: "#800020",
+      }}
+    >
       <span> {name}</span>
       <span>{infoSvg}</span>
     </div>

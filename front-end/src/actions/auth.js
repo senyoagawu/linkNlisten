@@ -16,7 +16,6 @@ export const loginDemo = async () => {
 };
 
 export const getUsersList = async () => {
-  debugger;
   const { users } = await myGet("/api/users/");
   const usersObj = {};
   users.forEach((user) => (usersObj[user.id] = user));
