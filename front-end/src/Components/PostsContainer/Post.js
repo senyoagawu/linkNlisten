@@ -11,7 +11,7 @@ const Post = ({ post }) => {
     <div className={styles.post}>
       <PostHeader post={post} />
       <PostBody body={post.body} />
-      <PostFooter authorsId={post.authors_id} postId={post.postId} />
+      <PostFooter authorsId={post.authors_id} post={post} />
       {/* <Reactions/>  */}
     </div>
   ) : null;

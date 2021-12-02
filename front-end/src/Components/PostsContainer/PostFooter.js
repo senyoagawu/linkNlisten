@@ -1,12 +1,11 @@
 import React, { useContext, createContext } from "react";
 import { editSvg, deleteSvg } from "../../svgs";
 import Button from "../Buttons";
-import { AppContext } from "../../App";
+import { AppContext, PostContext } from "../../App";
 
-const createContext = createContext();
-export default function PostFooter({ authorsId, postId }) {
+export default function PostFooter({ authorsId, post: { id: postId } }) {
   const { userId } = JSON.parse(localStorage.getItem("user")).user.id;
-
+  const { setUser, setPost, user } = useContext(PostContext);
   const {
     ui: { setModal },
   } = useContext(AppContext);
@@ -17,8 +16,12 @@ export default function PostFooter({ authorsId, postId }) {
       <Button
         explanation="click to delete post"
         svg={deleteSvg}
-        action={() => setModal("deletePost")}
+        action={() => {
+          setPost({ postId, authorsId });
+          setModal("deletePost");
+        }}
         // isDisabled={disabled}
+
         isDisabled={false}
       />
       <Button

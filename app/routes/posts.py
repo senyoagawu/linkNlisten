@@ -94,17 +94,17 @@ def edit_post(postId):
     return {"post": post.to_dict()}
 
 
-@bp.route("/<int:postId>", methods=["DELETE"], strict_slashes=False)  # add new post
-def delete_post(postId):
+@bp.route("/<int:postId>/<int:authorsId>", methods=["DELETE"], strict_slashes=False)  # add new post
+def delete_post(postId, authorsId):
     data = request.json
     print(f"\n\n\nDATA\n{data}\n\n\n")
 
     post = Post.query.get(postId)
-    if post.authors_id == data["authorsId"]:
+    if post.authors_id == authorsId:
         db.session.delete(post)
         db.session.commit()
-        return {"message": "post deleted"}
-    return {"message": "you are not authorized to delete this post"}
+        return {"success": True, "message": "post deleted"}
+    return {"success": False, "message": "you are not authorized to delete this post"}
 
 @bp.route("/<int:postId>", strict_slashes=False)  # add new post
 def get_post(postId):

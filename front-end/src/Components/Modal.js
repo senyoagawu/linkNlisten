@@ -8,6 +8,7 @@ import {
   DeletePost,
   EditPost,
 } from "./Forms/";
+import UIMessage from "./UIMessage";
 
 const forms = {
   login: Login,
@@ -18,6 +19,7 @@ const forms = {
   createPost: CreatePost,
   deletePost: DeletePost,
   editPost: EditPost,
+  uiMessage: UIMessage,
 };
 export default function Modal() {
   const {

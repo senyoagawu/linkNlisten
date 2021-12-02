@@ -3,10 +3,14 @@ import React, { useState, useContext } from "react";
 import styles from "./Form.module.css";
 // import { uploadImage } from "../../uploadImage";
 import { deletePost } from "../../actions/posts";
-import { AppContext } from "../../App";
+import { AppContext, PostContext, UIContext } from "../../App";
 
 const DeletePost = ({ setModal }) => {
+  const {
+    post: { postId, authorsId },
+  } = useContext(PostContext);
   const { setState } = useContext(AppContext);
+  const { uiMessage, setUiMessage } = useContext(UIContext);
   const closeModal = () => {
     setModal("");
   };
@@ -15,8 +19,11 @@ const DeletePost = ({ setModal }) => {
     e.preventDefault();
     const userId = JSON.parse(localStorage.user).user.id;
     // setState((state) => ({ ...state, posts }));
-    await deletePost();
-    closeModal();
+    // const res = await deletePost(postId, authorsId);
+    debugger;
+    const { message } = await deletePost(postId, authorsId);
+    setUiMessage(message);
+    setModal("uiMessage");
   };
 
   return (
