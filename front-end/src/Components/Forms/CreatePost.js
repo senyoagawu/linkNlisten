@@ -5,27 +5,30 @@ import styles from "./Form.module.css";
 import { createPost } from "../../actions/posts";
 import { AppContext } from "../../App";
 
-const Post = ({ setModal }) => {
-  const { setState } = useContext(AppContext);
-  const [message, setMessage] = useState({ message: "" });
+const CreatePost = () => {
+  const {
+    ui: { setModal },
+    setRefresn,
+  } = useContext(AppContext);
+
+  const [message, setMessage] = useState("");
+
   const closeModal = () => {
-    setModal({});
+    setModal("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = { email: JSON.parse(localStorage.user).email };
-    const { posts } = await createPost({ ...email, ...message });
-    setState((state) => ({ ...state, posts }));
+    const authorsId = JSON.parse(localStorage.user).user.id;
+    const { post } = await createPost({ authorsId, message });
+    //todo do we need this data
+    // setPosts(prev => [...prev, post])
     closeModal();
+    setRefresn((prev) => !prev);
   };
 
-  const onchange = (e) => {
-    e.preventDefault();
-    const val = e.target.value;
-    setMessage({
-      message: val,
-    });
+  const onchange = ({ target: { value } }) => {
+    setMessage(value);
   };
 
   return (
@@ -41,7 +44,7 @@ const Post = ({ setModal }) => {
             <input
               className={styles.inputs}
               type="text"
-              value={message.message}
+              value={message}
               placeholder="Message"
               name="message"
               onChange={onchange}
@@ -57,4 +60,4 @@ const Post = ({ setModal }) => {
   );
 };
 
-export default Post;
+export default CreatePost;

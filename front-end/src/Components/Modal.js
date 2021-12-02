@@ -1,14 +1,23 @@
 import React, { useContext } from "react";
 import { AppContext } from "../App";
-import { Login, Signup, CreateInterest } from "./Forms/";
+import {
+  Login,
+  Signup,
+  CreateInterest,
+  CreatePost,
+  DeletePost,
+  EditPost,
+} from "./Forms/";
 
 const forms = {
   login: Login,
   signup: Signup,
   null: null,
+  "": null,
   createInterest: CreateInterest,
-  deletePost: null,
-  editPost: null
+  createPost: CreatePost,
+  deletePost: DeletePost,
+  editPost: EditPost,
 };
 export default function Modal() {
   const {

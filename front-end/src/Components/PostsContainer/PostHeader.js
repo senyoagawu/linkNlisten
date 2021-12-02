@@ -11,7 +11,7 @@ export default function PostHeader({ post: { created_at, authors_id } }) {
   //   created_at,
   // }
   // const { first_name, profile_pic } =  usersList[authors_id];
-  console.log("users list", usersList);
+  debugger;
   return (
     usersList &&
     usersList.length > 0 && (

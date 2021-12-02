@@ -18,7 +18,9 @@ export default function Button({
       onMouseLeave={() => setShowExplanation(false)}
     >
       <div>
-        {showExplanation && <div className="">{explanation}</div>}
+        {!isDisabled && showExplanation && (
+          <div className="">{explanation}</div>
+        )}
 
         <button
           onClick={() => {

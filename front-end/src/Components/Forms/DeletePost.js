@@ -2,30 +2,21 @@ import React, { useState, useContext } from "react";
 // import {NavBar} from "../Navbar";
 import styles from "./Form.module.css";
 // import { uploadImage } from "../../uploadImage";
-import { createPost } from "../../actions/posts";
+import { deletePost } from "../../actions/posts";
 import { AppContext } from "../../App";
 
-const Post = ({ setModal }) => {
+const DeletePost = ({ setModal }) => {
   const { setState } = useContext(AppContext);
-  const [message, setMessage] = useState({ message: "" });
   const closeModal = () => {
-    setModal({});
+    setModal("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = { email: JSON.parse(localStorage.user).email };
-    const { posts } = await createPost({ ...email, ...message });
-    setState((state) => ({ ...state, posts }));
+    const userId = JSON.parse(localStorage.user).user.id;
+    // setState((state) => ({ ...state, posts }));
+    await deletePost();
     closeModal();
-  };
-
-  const onchange = (e) => {
-    e.preventDefault();
-    const val = e.target.value;
-    setMessage({
-      message: val,
-    });
   };
 
   return (
@@ -38,18 +29,20 @@ const Post = ({ setModal }) => {
             close
           </div>
           <div className={styles.field_container}>
-            <input
-              className={styles.inputs}
-              type="text"
-              value={message.message}
-              placeholder="Message"
-              name="message"
-              onChange={onchange}
-            />
+            Are you sure you want to delete this post?
           </div>
 
           <button className={styles.button_create_post} onClick={handleSubmit}>
-            Post
+            Yes
+          </button>
+          <button
+            className={styles.button_create_post}
+            onClick={(e) => {
+              e.preventDefault();
+              closeModal();
+            }}
+          >
+            No
           </button>
         </form>
       </div>
@@ -57,4 +50,4 @@ const Post = ({ setModal }) => {
   );
 };
 
-export default Post;
+export default DeletePost;

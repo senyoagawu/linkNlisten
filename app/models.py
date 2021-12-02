@@ -161,6 +161,7 @@ class Post(MixinAsDict, db.Model):
         return {
             "id": self.id,
             "body": self.body,
+            "authors_id": self.authors_id,
             "author": self.author.as_dict(),
             "created_at": self.created_at,
             # "interest": self.interest.as_dict(),
