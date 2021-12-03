@@ -6,17 +6,21 @@ import { getSubscribedPosts } from "../../actions/interests";
 
 const PostsContainer = ({ posts }) => {
   const {
-    slices,
-    slices: {
-      user: { email },
-    },
+    ui: { setModal },
   } = useContext(AppContext);
 
   console.log("posts ====>", posts);
   return (
-    <div className={styles.inner_container}>
-      {posts && posts.map((post) => <Post key={post.id} post={post} />)}
-    </div>
+    <>
+      <div>
+        <button onClick={() => setModal("createPost")}>
+          Post to the World
+        </button>
+      </div>
+      <div className={styles.inner_container}>
+        {posts && posts.map((post) => <Post key={post.id} post={post} />)}
+      </div>
+    </>
   );
 };
 

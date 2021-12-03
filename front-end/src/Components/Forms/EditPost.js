@@ -2,10 +2,10 @@ import React, { useState, useContext } from "react";
 // import {NavBar} from "../Navbar";
 import styles from "./Form.module.css";
 // import { uploadImage } from "../../uploadImage";
-import { createPost } from "../../actions/posts";
+import { editPost } from "../../actions/posts";
 import { AppContext } from "../../App";
 
-const CreatePost = () => {
+const EditPost = () => {
   const {
     ui: { setModal },
     setRefresn,
@@ -20,7 +20,7 @@ const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const authorsId = JSON.parse(localStorage.user).user.id;
-    const { post } = await createPost({ authorsId, message });
+    const { post } = await editPost({ authorsId, message });
     //todo do we need this data
     // setPosts(prev => [...prev, post])
     closeModal();
@@ -36,7 +36,7 @@ const CreatePost = () => {
       {/* <Navbar /> */}
       <div className={styles.form_container}>
         <form className={styles.create_post_form}>
-          <h2 className={styles.form_name}>Create a Post</h2>
+          <h2 className={styles.form_name}>Edit a Post</h2>
           <div className={styles.closeBtn} onClick={closeModal}>
             close
           </div>
@@ -60,4 +60,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

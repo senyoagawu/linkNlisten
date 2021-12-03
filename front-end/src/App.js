@@ -16,9 +16,12 @@ import {
   getIndividualPosts,
 } from "./utils/ajax";
 import Navbar from "./Components/Navbar";
+import * as postActions from "./actions/posts";
 export const AppContext = createContext();
 export const TabContext = createContext();
-
+export const UIContext = createContext();
+export const PostContext = createContext();
+window.postActions = postActions;
 export const App = (props) => {
   const defaultUser = () =>
     localStorage.user ? JSON.parse(localStorage.user) : null;
@@ -29,10 +32,10 @@ export const App = (props) => {
   const [token, setToken] = useState(null);
 
   const [usersList, setUsersList] = useState([]);
-
+  const [post, setPost] = useState({});
   const [refresh, setRefresh] = useState(false);
   const loggedIn = user !== null;
-
+  const [uiMessage, setUiMessage] = useState("");
   const [currentModal, setModal] = useState(null);
 
   const [selectedTab, setSelectedTab] = useState("posts");
@@ -48,63 +51,78 @@ export const App = (props) => {
     fetchUsersList();
   }, []);
 
+  const rerender = () => setRefresh((prev) => !prev);
+
   return (
     <BrowserRouter>
-      <AppContext.Provider
-        value={{
-          ui: {
-            setModal,
-            currentModal,
-            refresh,
-          },
-
-          slices: {
-            user,
-            token,
-            loggedIn,
-            interests,
-            posts,
-            usersList,
-          },
-
-          stateSetters: {
-            setInterests,
-            setPosts,
-            setUser,
-            setToken,
-            setRefresh,
-          },
-        }}
-      >
-        <Navbar loggedIn={loggedIn} />
-        <Modal />
-        <Switch>
-          <TabContext.Provider
+      <UIContext.Provider value={{ uiMessage, setUiMessage }}>
+        <PostContext.Provider value={{ post, setPost }}>
+          <AppContext.Provider
             value={{
-              selectedTab,
-              setSelectedTab,
+              ui: {
+                setModal,
+                currentModal,
+                rerender,
+              },
+
+              slices: {
+                user,
+                token,
+                loggedIn,
+                interests,
+                posts,
+                usersList,
+              },
+
+              stateSetters: {
+                setInterests,
+                setPosts,
+                setUser,
+                setToken,
+                setRefresh,
+              },
             }}
           >
-            <AuthRoute path="/splash" component={Splash} loggedIn={loggedIn} />
-            <PrivateRoute
-              exact
-              path="/interests"
-              loggedIn={loggedIn}
-              component={Interests}
-              // interests={interests}
-            />
-            <PrivateRoute
-              exact
-              path="/interests/:interestId"
-              loggedIn={loggedIn}
-              component={Interests}
+            <Navbar loggedIn={loggedIn} />
+            <Modal />
+            <Switch>
+              <TabContext.Provider
+                value={{
+                  selectedTab,
+                  setSelectedTab,
+                }}
+              >
+                <AuthRoute
+                  path="/splash"
+                  component={Splash}
+                  loggedIn={loggedIn}
+                />
+                <PrivateRoute
+                  exact
+                  path="/interests"
+                  loggedIn={loggedIn}
+                  component={Interests}
+                  // interests={interests}
+                />
+                <PrivateRoute
+                  exact
+                  path="/interests/:interestId"
+                  loggedIn={loggedIn}
+                  component={Interests}
 
-              // interests={interests}
-            />
-            <PrivateRoute exact path="/" loggedIn={loggedIn} component={Home} />
-          </TabContext.Provider>
-        </Switch>
-      </AppContext.Provider>
+                  // interests={interests}
+                />
+                <PrivateRoute
+                  exact
+                  path="/"
+                  loggedIn={loggedIn}
+                  component={Home}
+                />
+              </TabContext.Provider>
+            </Switch>
+          </AppContext.Provider>
+        </PostContext.Provider>
+      </UIContext.Provider>
     </BrowserRouter>
   );
 };
