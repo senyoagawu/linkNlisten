@@ -5,11 +5,12 @@ export default function UIMessage() {
   const { uiMessage } = useContext(UIContext);
   const {
     ui: { setModal },
-    setRefresn,
+    rerender,
   } = useContext(AppContext);
 
   const closeModal = () => {
     setModal("");
+    rerender();
   };
   debugger;
 

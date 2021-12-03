@@ -7,9 +7,13 @@ import { AppContext, PostContext, UIContext } from "../../App";
 
 const DeletePost = ({ setModal }) => {
   const {
+    setPost,
     post: { postId, authorsId },
   } = useContext(PostContext);
-  const { setState } = useContext(AppContext);
+
+  const {
+    ui: { rerender },
+  } = useContext(AppContext);
   const { uiMessage, setUiMessage } = useContext(UIContext);
   const closeModal = () => {
     setModal("");
@@ -20,10 +24,10 @@ const DeletePost = ({ setModal }) => {
     const userId = JSON.parse(localStorage.user).user.id;
     // setState((state) => ({ ...state, posts }));
     // const res = await deletePost(postId, authorsId);
-    debugger;
     const { message } = await deletePost(postId, authorsId);
     setUiMessage(message);
     setModal("uiMessage");
+    setPost({});
   };
 
   return (

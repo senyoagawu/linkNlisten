@@ -17,6 +17,7 @@ import {
   getSubscribedPosts,
 } from "../../actions/interests.js";
 import { AppContext, TabContext } from "../../App";
+export const HomeContext = createContext();
 
 //
 const Home = ({ allInterests = [] }) => {
@@ -54,16 +55,12 @@ const Home = ({ allInterests = [] }) => {
   return (
     <div className={styles.homepage}>
       <Lidebar
-
         setRefresh={setRefresh}
-
         heading="Interests"
         iterables={subscribedInterests}
       />
       <div className={styles.posts_container}>
-
         <PostsContainer setRefresh={setRefresh} posts={subscribedPosts} />
-
       </div>
     </div>
   );
