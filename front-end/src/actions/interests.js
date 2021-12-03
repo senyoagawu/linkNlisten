@@ -1,16 +1,17 @@
 import { myPost, myDelete, myGet } from "../utils/ajax";
 
 // return all interests
-export const getInterests = async () => {
-  return await myGet("/api/interests");
-};
-
-// return interests user is subscribed to
 export const getSubscriptions = async (email) => {
   //private. hence email
   if (email === null) return { subscribedInterests: [], subscriptionIds: [] };
   return await myGet(`/api/interests/subscriptions/${email}`);
 };
+export const getInterests = async () => {
+  return await myGet("/api/interests");
+};
+
+// return interests user is subscribed to
+
 export const getSubscription = async (id) => {
   //public hend no email (all users should get same return for same route)
   if (id) {
