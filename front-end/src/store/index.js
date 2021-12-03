@@ -1,9 +1,13 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import interests from "./interests";
+import posts from "./posts";
+import subscriptions from "./subscriptions";
 
 const rootReducer = combineReducers({
   interests,
+  subscriptions,
+  posts,
 });
 
 let enhancer;
