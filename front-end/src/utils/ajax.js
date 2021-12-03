@@ -76,7 +76,7 @@ export const editProfile = async (email, data) => {
 //   return theGet;
 // };
 
-// export const getIndividualPosts = (email) => {
+// export const getPost = (email) => {
 //   return myGet(`/api/posts/individual/${email}/`);
 // };
 

@@ -21,10 +21,12 @@ const fetchPosts = (posts) => ({
 });
 // exports
 
-export const getPosts = () => async (dispatch) => {
-  const { posts } = await postsActions.getPosts();
-  dispatch(fetchPosts(posts));
-};
+export const getPosts =
+  (...interestIds) =>
+  async (dispatch) => {
+    const { posts } = await postsActions.getPosts();
+    dispatch(fetchPosts(posts));
+  };
 export const deletePost = (postId) => async (dispatch) => {
   const res = await postsActions.deletePost(postId);
   const { message, status } = await res.json();
@@ -32,7 +34,7 @@ export const deletePost = (postId) => async (dispatch) => {
   dispatch(removePost(postId));
 };
 export const createPost = (post) => async (dispatch) => {
-  const res = await postsActions.addPost(post);
+  const res = await postsActions.createPost(post);
   const { post } = await res.json();
 
   dispatch(createPost(post));

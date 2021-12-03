@@ -10,11 +10,7 @@ import Ridebar from "./Components/Ridebar";
 import Interests from "./Components/Views/Interests";
 import { getInterests } from "./actions/interests";
 import { getUsersList } from "./actions/auth";
-import {
-  getSubscribedInterests,
-  getPosts,
-  getIndividualPosts,
-} from "./utils/ajax";
+import { getSubscribedInterests, getPosts, getPost } from "./utils/ajax";
 import Navbar from "./Components/Navbar";
 import * as postActions from "./actions/posts";
 export const AppContext = createContext();

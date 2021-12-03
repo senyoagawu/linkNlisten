@@ -1,12 +1,22 @@
 import { myPut, myPost, myDelete, myGet } from "../utils/ajax";
 
-export const getPosts = (email) => {
-  const theGet = myGet(`/api/posts/${email}/`);
-  console.log(theGet);
-  return theGet;
+export const getPosts = (interestIds) => {
+  const fetches = Promise.all(
+    interestIds.map((id) => myGet(`/api/interests/${id}`))
+  );
+  const postsByInterest = {};
+  const postsById = {};
+  fetches.forEach(({ interest }) => {
+    postsByInterest[interest.id] = interest.posts;
+    interest.posts.forEach((post) => {
+      postsById[post.id] = post;
+    });
+  });
+
+  return { postsByInterest, postsById };
 };
 
-export const getIndividualPosts = (email) => {
+export const getPost = (email) => {
   return myGet(`/api/posts/individual/${email}/`);
 };
 

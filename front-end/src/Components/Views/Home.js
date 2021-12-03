@@ -7,11 +7,7 @@ import PostsContainer from "../PostsContainer/";
 import Post from "../Forms/CreatePost";
 import styles from "./Home.module.css";
 import Lidebar from "../Sidebar";
-import {
-  getSubscribedInterests,
-  getPosts,
-  getIndividualPosts,
-} from "../../actions/posts";
+import { getSubscribedInterests, getPosts, getPost } from "../../actions/posts";
 import {
   getSubscriptions,
   getSubscribedPosts,

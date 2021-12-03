@@ -1,8 +1,8 @@
-import * as subscriptionsActions from "../actions/interests";
+import * as subscriptionsActions from "../actions/subscriptions";
 
 const SUBSCRIBE = "subscriptions/SUBSCRIBE";
 const UNSUBSCRIBE = "subscriptions/UNSUBSCRIBE";
-const FETCH_SUBSCRIPTIONS = "subscriptions/FETCH_SUBSCRIPTIONS1";
+const FETCH_SUBSCRIPTIONS = "subscriptions/FETCH_SUBSCRIPTIONS";
 
 const subscribe = (interestId) => ({
   action: SUBSCRIBE,
@@ -24,15 +24,15 @@ export const getSubscriptions = () => async (dispatch) => {
   const { subscriptions } = await subscriptionsActions.getSubscriptions();
   dispatch(fetchSubscriptions(subscriptions));
 };
-export const subscribe = (interestId) => async (dispatch) => {
+export const subscribeTo = (interestId) => async (dispatch) => {
   const { message } = await subscriptionsActions.subscribeTo(interestId);
 
-  dispatch(subscribeInterest(interestId));
+  dispatch(subscribe(interestId));
 };
 export const unsubscribe = (interestId) => async (dispatch) => {
   const { message } = await subscriptionsActions.unsubscribeFrom(interestId);
 
-  dispatch(unsubscribeInterest(interest));
+  dispatch(unsubscribe(interestId));
 };
 
 const initialState = []; //ids of groups current user is subscribed to
@@ -45,7 +45,7 @@ const arrayToObj = (arr) => {
 };
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_SUBCRIPTIONS:
+    case FETCH_SUBSCRIPTIONS:
       return {
         ...state,
         interests: arrayToObj(action.paylaod),
