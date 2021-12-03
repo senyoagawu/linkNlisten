@@ -63,7 +63,8 @@ def fetch_users_posts(email):
 
 @bp.route("/", methods=["POST"], strict_slashes=False)  # add new post
 def add_post():
-    data = request.json
+    data = request.get_json(force=True)
+
     print(f"\n\n\nDATA\n{data}\n\n\n")
     authorsId = data["authorsId"]
     #todo 404 error

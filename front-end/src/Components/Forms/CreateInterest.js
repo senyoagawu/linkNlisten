@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../App";
 import styles from "../Interests.module.css";
-import { addInterest } from "../../actions/interests";
+// import { addInterest } from "../../actions/interests";
+import { createInterest } from "../../store/interests";
 
 export default function CreateInterest() {
   const {
@@ -13,9 +14,9 @@ export default function CreateInterest() {
 
   const submitNewInterest = async (e) => {
     e.preventDefault();
-    await addInterest({ creatorsId, name });
+    // await addInterest({ creatorsId, name });
+    createInterest({ creatorsId, name });
     setModal(null);
-    setRefresh((prev) => !prev);
   };
   return (
     <div>

@@ -21,7 +21,7 @@ export const AppContext = createContext();
 export const TabContext = createContext();
 export const UIContext = createContext();
 export const PostContext = createContext();
-window.postActions = postActions;
+
 export const App = (props) => {
   const defaultUser = () =>
     localStorage.user ? JSON.parse(localStorage.user) : null;
