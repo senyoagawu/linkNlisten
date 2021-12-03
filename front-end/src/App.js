@@ -21,7 +21,6 @@ export const AppContext = createContext();
 export const TabContext = createContext();
 export const UIContext = createContext();
 export const PostContext = createContext();
-import {homeContext} from './Components/Views/Home'
 window.postActions = postActions;
 export const App = (props) => {
   const defaultUser = () =>
@@ -57,7 +56,6 @@ export const App = (props) => {
   return (
     <BrowserRouter>
       <UIContext.Provider value={{ uiMessage, setUiMessage }}>
-      <HomeContext.Provider value={{}}
         <PostContext.Provider value={{ post, setPost }}>
           <AppContext.Provider
             value={{

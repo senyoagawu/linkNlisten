@@ -17,7 +17,6 @@ import {
   getSubscribedPosts,
 } from "../../actions/interests.js";
 import { AppContext, TabContext } from "../../App";
-export const HomeContext = createContext();
 
 //
 const Home = ({ allInterests = [] }) => {
