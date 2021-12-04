@@ -41,10 +41,15 @@ export const editPost = (postId, authorsId, body) => async (dispatch) => {
   const { post } = await postsActions.editPost(postId, authorsId, body);
   dispatch(createPost(post));
 };
-export const createPost = (authorsId, body) => async (dispatch) => {
-  const { post } = await postsActions.createPost(authorsId, body);
-  dispatch(createPost(post));
-};
+export const createPost =
+  (authorsId, body, interestsId) => async (dispatch) => {
+    const { post } = await postsActions.createPost(
+      authorsId,
+      body,
+      interestsId
+    );
+    dispatch(createPost(post));
+  };
 
 const initialState = {
   posts: {},

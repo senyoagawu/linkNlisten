@@ -24,8 +24,8 @@ export const getPost = (email) => {
   return myGet(`/api/posts/individual/${email}/`);
 };
 
-export const createPost = (body, authorsId) => {
-  return myPost(`/api/posts/`, { body, authorsId });
+export const createPost = (body, authorsId, interestsId) => {
+  return myPost(`/api/posts/`, { body, authorsId, interestsId });
 };
 
 export const editPost = (postId, authorsId, body) => {

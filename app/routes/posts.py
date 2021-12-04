@@ -87,6 +87,8 @@ def edit_post(postId):
     try:
 
         post = Post.query.get(postId)
+        if authors_id  != post.authors_id:
+            return {"message": "you don't got the right to change this post"}
         post.body = body
         post.authors_id=authors_id
         post.updated_at="now"

@@ -19,7 +19,6 @@ migrate = Migrate(app, db)
 app.register_blueprint(sessions.bp)
 app.register_blueprint(users.bp)
 app.register_blueprint(interests.bp)
-# app.register_blueprint(interests_users.bp)
 app.register_blueprint(posts.bp)
 app.register_blueprint(subscriptions.bp)
 

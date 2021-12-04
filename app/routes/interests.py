@@ -75,8 +75,8 @@ def add_interest():
     return interest.to_dict()
 
 
-@bp.route("/<int:interestId", methods=["PUT"], strict_slashes=False)  # add new interest
-def add_interest(interestId):
+@bp.route("/<int:interestId>", methods=["PUT"], strict_slashes=False)  # add new interest
+def edit_interest(interestId):
     # data = request.json
     data = request.get_json(force=True)
     print(f"\n\n\nDATA\n{data}\n\n\n")

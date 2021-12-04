@@ -105,7 +105,7 @@ class Interest(MixinAsDict, db.Model):  # channels
     banner_url = db.Column(db.String)
     creators_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(
-        db.DateTime(timezone=True), server_default=func.now(), nullable=False
+        db.DateTime(timezone=True), server_default=func.now(),  nullable=False
     )
     updated_at = db.Column(
         db.DateTime(timezone=True), server_default=func.now(), nullable=False
