@@ -70,8 +70,50 @@ def add_interest():
     db.session.commit()
     # automatically subscribe to created group
     user = User.query.get(creator_id)
-    old_interests = user.subscriptions
-    old_interests.append(interest)
     user.subscriptions.append(interest)
     db.session.commit()
-    return interest.as_dict()
+    return interest.to_dict()
+
+
+@bp.route("/<int:interestId", methods=["PUT"], strict_slashes=False)  # add new interest
+def add_interest(interestId):
+    # data = request.json
+    data = request.get_json(force=True)
+    print(f"\n\n\nDATA\n{data}\n\n\n")
+
+    creator_id = data["creatorsId"]
+    interest = Interest(
+        name=data["name"],
+        created_at="now",
+        updated_at="now",
+        creators_id=creator_id,
+    )
+    db.session.add(interest)
+    db.session.commit()
+    # automatically subscribe to created group
+    user = User.query.get(creator_id)
+    user.subscriptions.append(interest)
+    db.session.commit()
+    return interest.to_dict()
+
+@bp.route("/<int:interestId>", methods=["DELETE"], strict_slashes=False)  # add new interest
+def remove_interest(interestId):
+    # data = request.json
+    data = request.get_json(force=True)
+    print(f"\n\n\nDATA\n{data}\n\n\n")
+    interest = Interest.query.get(interestId)
+    creators_id = data["creatorsId"]
+
+    if creators_id == interest.id:
+        db.session.delete(interest)
+        db.session.commit()
+        return {"message": "interest group successfully deleted!"}
+
+    return {"message": "something went wrong"}
+
+
+    # automatically subscribe to created group
+    user = User.query.get(creator_id)
+    user.subscriptions.append(interest)
+    db.session.commit()
+    return interest.to_dict()

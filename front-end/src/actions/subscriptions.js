@@ -6,9 +6,9 @@ export const getSubscriptions = async (userId) => {
 };
 
 export const subscribeTo = async (userId, interestId) => {
-  return await myGet(`/api/subscriptions/add/${userId}/${interestId}`);
+  return await myGet(`/api/subscriptions/follow/${userId}/${interestId}`);
 };
 
 export const unsubscribeFrom = async (userId, interestId) => {
-  return await myGet(`/api/subscriptions/remove/${userId}/${interestId}`);
+  return await myGet(`/api/subscriptions/unfollow/${userId}/${interestId}`);
 };

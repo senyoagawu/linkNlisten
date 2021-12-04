@@ -1,6 +1,10 @@
 import { myPut, myPost, myDelete, myGet } from "../utils/ajax";
 
 export const getPosts = (interestIds) => {
+  if (["string", "number"].includes(typeof interestIds)) {
+    interestIds = [interestIds];
+  }
+
   const fetches = Promise.all(
     interestIds.map((id) => myGet(`/api/interests/${id}`))
   );
@@ -20,14 +24,12 @@ export const getPost = (email) => {
   return myGet(`/api/posts/individual/${email}/`);
 };
 
-export const createPost = (data) => {
-  console.log(data);
-  return myPost(`/api/posts/`, data);
+export const createPost = (body, authorsId) => {
+  return myPost(`/api/posts/`, { body, authorsId });
 };
 
-export const editPost = (postId, userId, data) => {
-  console.log(postId, userId, data);
-  return myPut(`/api/posts/${postId}/${userId}`, data);
+export const editPost = (postId, authorsId, body) => {
+  return myPut(`/api/posts/${postId}`, { body, authorsId });
 };
 
 export const deletePost = (postId, userId) => {

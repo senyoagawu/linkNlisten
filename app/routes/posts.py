@@ -66,12 +66,11 @@ def add_post():
     data = request.get_json(force=True)
 
     print(f"\n\n\nDATA\n{data}\n\n\n")
-    authorsId = data["authorsId"]
     #todo 404 error
 
 
     post = Post(
-        body=data["body"], authors_id=data["authorsId"], created_at="now", updated_at="now"
+        body=data["body"], authors_id=data["authorsId"], interests_id=data["interestsId"], created_at="now", updated_at="now"
     )
     db.session.add(post)
     db.session.commit()
@@ -81,18 +80,24 @@ def add_post():
 
 @bp.route("/<int:postId>", methods=["PUT"], strict_slashes=False)  # add new post
 def edit_post(postId):
-    data = request.json
-    print(f"\n\n\nDATA\n{data}\n\n\n")
+    data = request.get_json(force=True)
+    # print(f"\n\n\nDATA\n{data}\n\n\n")
+    body, authors_id = data["body"], data["authorsId"]
+    print(f"\n\n\nDATA\n{body}\n\n{authors_id}\n")
+    try:
 
-    post = Post.query.get(postId)
-    post.body = data["body"]
-    post.authors_id=data["authorsId"]
-    post.updated_at="now"
+        post = Post.query.get(postId)
+        post.body = body
+        post.authors_id=authors_id
+        post.updated_at="now"
 
-    db.session.commit()
-    # fetch_posts_with_follows(email)
+        db.session.commit()
+        # fetch_posts_with_follows(email)
 
-    return {"post": post.to_dict()}
+        return {"post": post.to_dict()}
+    except:
+        {"message": "could not find that post"}
+
 
 
 @bp.route("/<int:postId>/<int:authorsId>", methods=["DELETE"], strict_slashes=False)  # add new post
@@ -106,6 +111,7 @@ def delete_post(postId, authorsId):
         db.session.commit()
         return {"success": True, "message": "post deleted"}
     return {"success": False, "message": "you are not authorized to delete this post"}
+
 
 @bp.route("/<int:postId>", strict_slashes=False)  # add new post
 def get_post(postId):
