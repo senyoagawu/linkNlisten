@@ -1,11 +1,11 @@
 import { myPut, myPost, myDelete, myGet } from "../utils/ajax";
 
-export const getPosts = (interestIds) => {
+export const getPosts = async (...interestIds) => {
   if (["string", "number"].includes(typeof interestIds)) {
     interestIds = [interestIds];
   }
 
-  const fetches = Promise.all(
+  const fetches = await Promise.all(
     interestIds.map((id) => myGet(`/api/interests/${id}`))
   );
   const postsByInterest = {};

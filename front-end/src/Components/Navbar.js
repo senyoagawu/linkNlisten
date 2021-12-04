@@ -5,23 +5,24 @@ import "./Navbar.module.css";
 import { AppContext } from "../App";
 import NavbarLI from "./NavbarLi";
 import { homeSvg, interestsSvg } from "../svgs";
+import Dropdown from "./Dropdown";
 import { loginDemo } from "../actions/auth";
 import { NavBarButton } from "./Buttons";
 
-export default function Navbar() {
+export default function Navbar({ user }) {
   const {
     ui: { setModal },
-    loggedIn,
     stateSetters: { setUser },
-    slices: { user },
   } = useContext(AppContext);
 
+  const loggedIn = user !== null;
   return (
     <>
       <nav>
         <ul>
           <span className="left">
             <NavbarLI onlyPrivate={false} onlyPublic={false}>
+              {" "}
               <NavLink
                 to={loggedIn ? "/" : "/splash"}
                 exact={true}
@@ -30,45 +31,12 @@ export default function Navbar() {
                 {homeSvg}
               </NavLink>
             </NavbarLI>
-          </span>
-          <span className="right">
             <NavbarLI onlyPrivate={true}>
               <NavLink to="/interests" exact={true} activeClassName="active">
-                Interests
+                {interestsSvg}
               </NavLink>
             </NavbarLI>
-
-            <NavBarButton
-              onlyPublic={true}
-              text="Login"
-              explanation="Click to login"
-              action={() => setModal("login")}
-            />
-            <NavBarButton
-              onlyPublic={true}
-              text="Signup"
-              explanation="Click to create account"
-              action={() => setModal("signup")}
-            />
-            <NavBarButton
-              onlyPublic={true}
-              text="Demo Login"
-              action={async () => {
-                const user = await loginDemo();
-                localStorage.setItem("user", JSON.stringify(user));
-                setUser(user);
-              }}
-              explanation="Click to login as Demo User"
-            />
-            <NavBarButton
-              onlyPrivate={true}
-              text="Logout"
-              explanation="Click to logout"
-              action={async () => {
-                localStorage.clear();
-                setUser(null);
-              }}
-            />
+            <Dropdown />
           </span>
         </ul>
       </nav>

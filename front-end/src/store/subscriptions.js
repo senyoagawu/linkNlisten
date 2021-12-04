@@ -9,7 +9,7 @@ const subscribe = (interestId) => ({
   payload: interestId,
 });
 
-const unsubscribeInterest = (interestId) => ({
+const unsubscribe = (interestId) => ({
   action: UNSUBSCRIBE,
   payload: interestId,
 });
@@ -20,8 +20,8 @@ const fetchSubscriptions = (interestIds) => ({
 });
 // exports
 
-export const getSubscriptions = () => async (dispatch) => {
-  const { subscriptions } = await subscriptionsActions.getSubscriptions();
+export const getSubscriptions = (userId) => async (dispatch) => {
+  const { subscriptions } = await subscriptionsActions.getSubscriptions(userId);
   dispatch(fetchSubscriptions(subscriptions));
 };
 export const subscribeTo = (interestId) => async (dispatch) => {
@@ -29,7 +29,8 @@ export const subscribeTo = (interestId) => async (dispatch) => {
 
   dispatch(subscribe(interestId));
 };
-export const unsubscribe = (interestId) => async (dispatch) => {
+
+export const unsubscribeFrom = (interestId) => async (dispatch) => {
   const { message } = await subscriptionsActions.unsubscribeFrom(interestId);
 
   dispatch(unsubscribe(interestId));

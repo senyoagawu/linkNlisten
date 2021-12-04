@@ -39,7 +39,7 @@ const Sidebar = ({
             <li key={index}>
               <img
                 style={{ width: "30px", height: "30px" }}
-                src={interest.link || "https://i.imgur.com/yGEyOfa.jpeg"}
+                src={interest.link || "/static/stockInterest.jpeg"}
                 alt="interest banner"
               />
               <a href={`/interests/${interest.id}`}>{interest.name}</a>

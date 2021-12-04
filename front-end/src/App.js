@@ -35,7 +35,6 @@ export const App = (props) => {
   const [usersList, setUsersList] = useState([]);
   const [post, setPost] = useState({});
   const [refresh, setRefresh] = useState(false);
-  const loggedIn = user !== null;
   const [uiMessage, setUiMessage] = useState("");
   const [currentModal, setModal] = useState(null);
 
@@ -69,7 +68,6 @@ export const App = (props) => {
               slices: {
                 user,
                 token,
-                loggedIn,
                 interests,
                 posts,
                 usersList,
@@ -84,7 +82,7 @@ export const App = (props) => {
               },
             }}
           >
-            <Navbar loggedIn={loggedIn} />
+            <Navbar user={user} />
             <Modal />
             <Switch>
               <TabContext.Provider
@@ -93,32 +91,23 @@ export const App = (props) => {
                   setSelectedTab,
                 }}
               >
-                <AuthRoute
-                  path="/splash"
-                  component={Splash}
-                  loggedIn={loggedIn}
-                />
+                <AuthRoute path="/splash" component={Splash} user={user} />
                 <PrivateRoute
                   exact
                   path="/interests"
-                  loggedIn={loggedIn}
+                  user={user}
                   component={Interests}
                   // interests={interests}
                 />
                 <PrivateRoute
                   exact
                   path="/interests/:interestId"
-                  loggedIn={loggedIn}
+                  user={user}
                   component={Interests}
 
                   // interests={interests}
                 />
-                <PrivateRoute
-                  exact
-                  path="/"
-                  loggedIn={loggedIn}
-                  component={Home}
-                />
+                <PrivateRoute exact path="/" user={user} component={Home} />
               </TabContext.Provider>
             </Switch>
           </AppContext.Provider>

@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, url_for
 from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin
 
@@ -43,11 +43,15 @@ app.register_blueprint(subscriptions.bp)
 #                         httponly=True)
 #     return response
 
-
+@app.route('/static/<path:filename>')
+def serve_files(filename):
+    return url_for(filename)
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def react_root(path):
     print("path", path)
     if path == "favicon.ico":
         return app.send_static_file("favicon.ico")
+    elif path[0:5] == 'static':
+        return url_for()
     return app.send_static_file("index.html")

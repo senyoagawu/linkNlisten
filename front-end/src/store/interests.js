@@ -19,7 +19,11 @@ const fetchInterests = (interests) => ({
   payload: interests,
 });
 // exports
+export const subscribeTo = (interestId) => async (dispatch) => {
+  const { message } = await interestsActions.getInterests();
 
+  dispatch(addInterest(interestId));
+};
 export const getInterests = () => async (dispatch) => {
   const { interests } = await interestsActions.getInterests();
   dispatch(fetchInterests(interests));

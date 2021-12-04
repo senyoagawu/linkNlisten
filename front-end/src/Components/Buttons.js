@@ -43,10 +43,16 @@ export const NavBarButton = ({
   text,
   explanation,
   action,
+  svg,
 }) => {
   return (
     <NavBarListElement onlyPrivate={onlyPrivate} onlyPublic={onlyPublic}>
-      <Button text={text} explanation={explanation} action={action} />
+      <Button
+        text={text}
+        explanation={explanation}
+        action={action}
+        svg={svg || null}
+      />
     </NavBarListElement>
   );
 };

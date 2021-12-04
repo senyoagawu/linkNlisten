@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { AppContext } from "../App";
 export default function NavBarListItem({ onlyPrivate, onlyPublic, children }) {
   const {
-    slices: { user, loggedIn },
+    slices: { user },
   } = useContext(AppContext);
-
+  const loggedIn = user !== null;
   const show = (onlyPrivate, onlyPublic, loggedIn) => {
     if (loggedIn) {
       if (onlyPrivate) {
