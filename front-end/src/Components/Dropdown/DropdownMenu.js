@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AppContext } from "../../App";
 import { NavBarButton } from "../Buttons";
 import { loginDemo } from "../../actions/auth";
+import styles from "../Navbar.module.css";
 export default function DropDownMenu() {
   const {
     slices: { user },
@@ -13,16 +14,16 @@ export default function DropDownMenu() {
   // const loggedIn = loggedIn;
 
   return (
-    <span className="right">
+    <span className={styles.dropdown}>
       <ul>
         <NavBarButton
-          onPrivate={true}
+          onlyPrivate={true}
           text="profile page"
           explanation="click to go to profile page"
           action={() => setModal("userSettings")}
         />
         <NavBarButton
-          onPrivate={true}
+          onlyPrivate={true}
           text="manage subscriptions"
           explanation="click to manage interests you want to follow"
           action={() => setModal("userSettings")}

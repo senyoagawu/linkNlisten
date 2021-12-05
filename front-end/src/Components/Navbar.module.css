@@ -1,13 +1,16 @@
 nav>ul {
+	margin: auto;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	box-sizing: border-box;
 	padding: 15px;
-	width: 100%;
+	width: 95%;
+	border: 1px solid red;
 }
 
 nav>ul>li {
+	display: flex;
 	list-style: none;
 	margin-right: 1rem;
 	font-size: 1.5rem;
@@ -18,14 +21,21 @@ nav>ul>li {
 
 }
 
+.dropdown {
+	position: fixed;
+	border: 1px solid red;
+	width: 200px;
+
+
+	right: 200px;
+}
+
 .left {
 	width: 400px;
-	border: 1px solid red;
 }
 
 .right {
 	display: flex;
-	border: 1px solid red;
 	flex-direction: row;
 	width: 40%;
 	justify-content: space-between;

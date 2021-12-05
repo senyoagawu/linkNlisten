@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { loginDemo, logoutUser } from "../actions/auth";
 
 import NavBarListElement from "./NavbarLi";
@@ -13,49 +13,39 @@ export default function Button({
 
   return (
     <div
-      style={{ border: "1px solid red" }}
       onMouseEnter={() => setShowExplanation(true)}
       onMouseLeave={() => setShowExplanation(false)}
     >
-      <div>
-        {!isDisabled && showExplanation && (
-          <div className="">{explanation}</div>
-        )}
+      {!isDisabled && showExplanation && <div className="">{explanation}</div>}
 
-        <button
-          onClick={() => {
-            action && action();
-          }}
-          type="button"
-          disabled={isDisabled}
-        >
-          {text}
-          {svg}
-        </button>
-      </div>
+      <button
+        onClick={() => {
+          action && action();
+        }}
+        type="button"
+        disabled={isDisabled}
+      >
+        {text}
+        {svg}
+      </button>
     </div>
   );
 }
 
-export const NavBarButton = ({
-  onlyPrivate,
-  onlyPublic,
-  text,
-  explanation,
-  action,
-  svg,
-}) => {
-  return (
-    <NavBarListElement onlyPrivate={onlyPrivate} onlyPublic={onlyPublic}>
-      <Button
-        text={text}
-        explanation={explanation}
-        action={action}
-        svg={svg || null}
-      />
-    </NavBarListElement>
-  );
-};
+export const NavBarButton = forwardRef(
+  ({ onlyPrivate, onlyPublic, text, explanation, action, svg }, ref) => {
+    return (
+      <NavBarListElement onlyPrivate={onlyPrivate} onlyPublic={onlyPublic}>
+        <Button
+          text={text}
+          explanation={explanation}
+          action={action}
+          svg={svg || null}
+        />
+      </NavBarListElement>
+    );
+  }
+);
 export const DemoLoginButton = () => {
   return (
     <NavBarButton

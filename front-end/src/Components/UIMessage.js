@@ -12,7 +12,6 @@ export default function UIMessage() {
     setModal("");
     rerender();
   };
-  debugger;
 
   return (
     <div>

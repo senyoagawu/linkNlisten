@@ -1,14 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, forwardRef } from "react";
 // import {NavBar} from "../Navbar";
 import styles from "./Form.module.css";
 // import { uploadImage } from "../../uploadImage";
 import { createPost } from "../../actions/posts";
 import { AppContext } from "../../App";
 
-const CreatePost = () => {
+const CreatePost = forwardRef((props, ref) => {
   const {
     ui: { setModal },
-    setRefresn,
+    setRefresh,
   } = useContext(AppContext);
 
   const [message, setMessage] = useState("");
@@ -24,7 +24,7 @@ const CreatePost = () => {
     //todo do we need this data
     // setPosts(prev => [...prev, post])
     closeModal();
-    setRefresn((prev) => !prev);
+    setRefresh((prev) => !prev);
   };
 
   const onchange = ({ target: { value } }) => {
@@ -34,7 +34,7 @@ const CreatePost = () => {
   return (
     <div>
       {/* <Navbar /> */}
-      <div className={styles.form_container}>
+      <div ref={ref} className={styles.form_container}>
         <form className={styles.create_post_form}>
           <h2 className={styles.form_name}>Create a Post</h2>
           <div className={styles.closeBtn} onClick={closeModal}>
@@ -58,6 +58,6 @@ const CreatePost = () => {
       </div>
     </div>
   );
-};
+});
 
 export default CreatePost;

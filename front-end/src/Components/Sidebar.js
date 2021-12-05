@@ -22,7 +22,6 @@ const Sidebar = ({
         <span>{heading}</span>
         <Button
           style={{ width: 30, height: 30 }}
-          onClick={() => setModal("createInterest")}
           svg={interestsSvg}
           action={() => setModal("createInterest")}
         />

@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, forwardRef } from "react";
 import { AppContext } from "../App";
+
 import {
   Login,
   Signup,
@@ -22,6 +23,8 @@ const forms = {
   uiMessage: UIMessage,
 };
 export default function Modal() {
+  const ref = useRef();
+
   const {
     ui: { currentModal, setModal },
     loggedIn,
@@ -31,5 +34,23 @@ export default function Modal() {
 
   const Form = forms[currentModal];
 
-  return currentModal ? <Form setModal={setModal} setUser={setUser} /> : null;
+  useEffect(() => {
+    const closeMenu = ({ target }) => {
+      if (ref.current && ref.current.contains(target)) return;
+      setModal("");
+    };
+
+    document.body.addEventListener("click", closeMenu);
+
+    // cleanup function
+    return () => {
+      document.body.removeEventListener("click", closeMenu);
+    };
+  }, [setModal]);
+
+  return currentModal ? (
+    <div ref={ref}>
+      <Form ref={ref} setModal={setModal} setUser={setUser} />
+    </div>
+  ) : null;
 }

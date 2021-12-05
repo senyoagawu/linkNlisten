@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { AppContext } from "../../App";
-import { NavBarButton } from "../Buttons";
+import Button, { NavBarButton } from "../Buttons";
 import DropdownMenu from "./DropdownMenu";
-const gear = <image alt="open menu icon" src="/static/gear.png"></image>;
+const gear = <img alt="open menu icon" src="/static/gear.png"></img>;
 export default function Dropdown() {
   const {
     slices: { user },
@@ -12,7 +12,7 @@ export default function Dropdown() {
   const loggedIn = user !== null;
   useEffect(() => {
     const closeMenu = (event) => {
-      if (ref.current.contains(event.target)) return;
+      if (ref && ref.current && ref.current.contains(event.target)) return;
       setOpen(false);
     };
 
@@ -25,15 +25,15 @@ export default function Dropdown() {
   }, []);
 
   return (
-    <div ref={ref}>
-      <NavBarButton
-        onPrivate={true}
-        explanation="click to open menu"
-        text="menu"
-        action={() => setOpen(true)}
-        svg={gear}
-      />
+    <>
+      <li ref={ref}>
+        <Button text="Enter" action action={() => setOpen(true)} svg={gear} />
+        {/* <NavBarButton
+          ref={ref}
+          onPrivate={true}
+        /> */}
+      </li>
       {open && <DropdownMenu />}
-    </div>
+    </>
   );
 }

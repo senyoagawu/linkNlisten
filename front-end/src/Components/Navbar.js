@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./Splash.module.css";
+// import "./Splash.module.css";
 import { NavLink } from "react-router-dom";
 import "./Navbar.module.css";
 import { AppContext } from "../App";
@@ -8,7 +8,6 @@ import { homeSvg, interestsSvg } from "../svgs";
 import Dropdown from "./Dropdown";
 import { loginDemo } from "../actions/auth";
 import { NavBarButton } from "./Buttons";
-
 export default function Navbar({ user }) {
   const {
     ui: { setModal },
@@ -18,26 +17,24 @@ export default function Navbar({ user }) {
   const loggedIn = user !== null;
   return (
     <>
-      <nav>
+      <nav className="navbarItems">
         <ul>
-          <span className="left">
-            <NavbarLI onlyPrivate={false} onlyPublic={false}>
-              {" "}
-              <NavLink
-                to={loggedIn ? "/" : "/splash"}
-                exact={true}
-                activeClassName="active"
-              >
-                {homeSvg}
-              </NavLink>
-            </NavbarLI>
-            <NavbarLI onlyPrivate={true}>
-              <NavLink to="/interests" exact={true} activeClassName="active">
-                {interestsSvg}
-              </NavLink>
-            </NavbarLI>
-            <Dropdown />
-          </span>
+          <NavbarLI onlyPrivate={false} onlyPublic={false}>
+            {" "}
+            <NavLink
+              to={loggedIn ? "/" : "/splash"}
+              exact={true}
+              activeClassName="active"
+            >
+              {homeSvg}
+            </NavLink>
+          </NavbarLI>
+          <NavbarLI onlyPrivate={true}>
+            <NavLink to="/interests" exact={true} activeClassName="active">
+              {interestsSvg}
+            </NavLink>
+          </NavbarLI>
+          <Dropdown />
         </ul>
       </nav>
     </>
