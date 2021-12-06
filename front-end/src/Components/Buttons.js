@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from "react";
 import { loginDemo, logoutUser } from "../actions/auth";
-
+import styles from "./Navbar.module.css";
 import NavBarListElement from "./NavbarLi";
 export default function Button({
   text,
@@ -10,21 +10,26 @@ export default function Button({
   svg,
 }) {
   const [showExplanation, setShowExplanation] = useState(false);
+  const display = !showExplanation ? "none" : "inherit";
+  const explanationStyle = {
+    display,
+    position: "relative",
+    fontSize: 15,
+    fontWeight: 400,
+  };
 
   return (
     <div
+      className={styles.buttonHolder}
+      onClick={() => {
+        action && action();
+      }}
       onMouseEnter={() => setShowExplanation(true)}
       onMouseLeave={() => setShowExplanation(false)}
     >
-      {!isDisabled && showExplanation && <div className="">{explanation}</div>}
+      <div style={explanationStyle}>{explanation}</div>
 
-      <button
-        onClick={() => {
-          action && action();
-        }}
-        type="button"
-        disabled={isDisabled}
-      >
+      <button type="button" disabled={isDisabled}>
         {text}
         {svg}
       </button>

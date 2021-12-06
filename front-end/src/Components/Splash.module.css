@@ -1,52 +1,61 @@
-.splash_container{
-  display: grid;
-  grid-template-columns: 1fr 50px 500px 80px 400px 50px 1fr;
-  grid-template-rows: 30px 80px 60px 100px 300px 100px 1fr;
-  grid-template-areas:
-  ". . . . . . ." 
-  ". navbar navbar navbar navbar navbar ."
-  ". . . . . . ." 
-  ". . left . . . ."
-  ". . left . right . ."
-  ". . left . . . ."
-  ". . . . . . .";
+.splash_container {
+	display: grid;
+	grid-template-columns: 1fr 50px 500px 80px 400px 50px 1fr;
+	grid-template-rows: 30px 80px 60px 100px 300px 100px 1fr;
+	grid-template-areas:
+		". . . . . . ."
+		". navbar navbar navbar navbar navbar ."
+		". . . . . . ."
+		". . left . . . ."
+		". . left . right . ."
+		". . left . . . ."
+		". . . . . . .";
 
 }
-.logo{
-  width: 70px;
-  margin-left: 25px;
-  color: #5fa83e
+
+.logo {
+	width: 70px;
+	margin-left: 25px;
+	color: #5fa83e
 }
 
-.navbar_container{ 
-  grid-area: navbar; display: flex; justify-content: space-between;align-items: center;
-  border: 1px solid #A6557C;
-  border-radius: 8px;
-  box-sizing: border-box;
+.navbar_container {
+	/* grid-area: navbar; display: flex; justify-content: space-between;align-items: center; */
+	border: 5px solid #A6557C;
+	border-radius: 8px;
+	box-sizing: border-box;
 }
 
-.main_left{ grid-area: left;}
-.main_right{ grid-area: right; display: flex; flex-direction: column; justify-content: space-between;}
-
-.splash_links{
-  display: flex;
+.main_left {
+	grid-area: left;
 }
 
-.splash_links > *{
-  margin: 0 30px;
-  color: #6455A6;
-  font-size: 30px;
+.main_right {
+	grid-area: right;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
-.splash_links > *:hover{
-  color: #B05AAF;
-  cursor: pointer;
-  font-weight: 600;
+.splash_links {
+	display: flex;
 }
 
-.main_right > p{
-  text-align: right;
-  color: #9b4ab8;
-  font-size: 48px;
-  font-family: 'font2';
+.splash_links>* {
+	margin: 0 30px;
+	color: #6455A6;
+	font-size: 30px;
+}
+
+.splash_links>*:hover {
+	color: #B05AAF;
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.main_right>p {
+	text-align: right;
+	color: #9b4ab8;
+	font-size: 48px;
+	font-family: 'font2';
 }

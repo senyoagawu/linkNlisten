@@ -1,21 +1,45 @@
 nav>ul {
-	margin: auto;
+	margin: 20px auto;
+
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	box-sizing: border-box;
 	padding: 15px;
+	height: 75px;
 	width: 95%;
-	border: 1px solid red;
+	border: 2px solid #A6557C;
+	border-radius: 8px;
+
 }
 
+.homeSvg {
+	box-sizing: border-box;
+	padding: 0 20px;
+	position: relative;
+	top: 3px;
+}
+
+.interestsSvg {
+	box-sizing: border-box;
+	padding: 0 20px;
+	position: relative;
+	top: 3px;
+}
+
+/* nav> svg {
+
+} */
 nav>ul>li {
 	display: flex;
+	align-items: center;
+
 	list-style: none;
 	margin-right: 1rem;
 	font-size: 1.5rem;
 	font-weight: bold;
-	color: #fff;
+	/* color: #fff; */
+	color: #A6557C;
 	cursor: pointer;
 	transition: all 0.3s ease-in-out;
 
@@ -23,11 +47,22 @@ nav>ul>li {
 
 .dropdown {
 	position: fixed;
-	border: 1px solid red;
-	width: 200px;
+	border: 2px solid #A6557C;
+	border-radius: 8px;
+	box-sizing: border-box;
+	background: #f4eaea;
+	width: 300px;
+	right: 2.5%;
+	transform: translate(0%, 38%);
 
 
-	right: 200px;
+}
+
+.dropdown>ul {
+	flex-direction: column;
+	display: flex;
+
+	align-items: flex-end;
 }
 
 .left {
@@ -43,6 +78,26 @@ nav>ul>li {
 	padding: 15px;
 }
 
-nav>ul>li:hover {
-	color: #f00;
+
+
+.explanation {
+	position: relative;
+	font-size: 15px;
+	font-weight: 400;
+}
+
+.views {
+	display: flex;
+	flex-direction: row;
+	width: 200px;
+	/* border: 1px solid red; */
+
+}
+
+.buttonHolder:hover {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	color: #B05AAF;
+	cursor: pointer;
 }

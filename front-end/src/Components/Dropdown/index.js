@@ -2,7 +2,14 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { AppContext } from "../../App";
 import Button, { NavBarButton } from "../Buttons";
 import DropdownMenu from "./DropdownMenu";
-const gear = <img alt="open menu icon" src="/static/gear.png"></img>;
+const hamburger = (
+  <img
+    height="20px"
+    width="20px"
+    alt="open menu icon"
+    src="/static/hamburger.png"
+  ></img>
+);
 export default function Dropdown() {
   const {
     slices: { user },
@@ -27,7 +34,7 @@ export default function Dropdown() {
   return (
     <>
       <li ref={ref}>
-        <Button text="Enter" action action={() => setOpen(true)} svg={gear} />
+        <Button action action={() => setOpen(true)} svg={hamburger} />
         {/* <NavBarButton
           ref={ref}
           onPrivate={true}
