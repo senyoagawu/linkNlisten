@@ -53,8 +53,8 @@ nav>ul>li {
 	background: #f4eaea;
 	width: 300px;
 	right: 2.5%;
-	transform: translate(0%, 38%);
-
+	transform: translate(0%, -80%);
+	box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3), 0 7px 20px 0 rgba(0, 0, 0, 0.17)
 
 }
 

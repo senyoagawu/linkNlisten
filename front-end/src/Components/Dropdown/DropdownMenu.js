@@ -25,7 +25,7 @@ export default function DropDownMenu() {
         <NavBarButton
           onlyPrivate={true}
           text="manage subscriptions"
-          explanation="click to manage interests you want to follow"
+          explanation="click to manage subsriptions"
           action={() => setModal("userSettings")}
         />
 

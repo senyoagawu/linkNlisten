@@ -4,8 +4,12 @@ import Button, { NavBarButton } from "../Buttons";
 import DropdownMenu from "./DropdownMenu";
 const hamburger = (
   <img
-    height="20px"
-    width="20px"
+    style={{
+      height: 40,
+      height: 40,
+      padding: "0 15px",
+      boxSizing: "border-box",
+    }}
     alt="open menu icon"
     src="/static/hamburger.png"
   ></img>
@@ -34,7 +38,7 @@ export default function Dropdown() {
   return (
     <>
       <li ref={ref}>
-        <Button action action={() => setOpen(true)} svg={hamburger} />
+        <Button action={() => setOpen(true)} svg={hamburger} />
         {/* <NavBarButton
           ref={ref}
           onPrivate={true}
