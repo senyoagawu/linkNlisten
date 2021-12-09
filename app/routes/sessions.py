@@ -45,7 +45,8 @@ def signup():
     db.session.commit()
 
     access_token = jwt.encode({"email": user.email}, Configuration.SECRET_KEY)
-    return {"access_token": access_token.decode("UTF-8"), "user": user.as_dict()}
+    return {"access_token": str(access_token), "user": user.as_dict()}
+    # return {"access_token": access_token.decode("UTF-8"), "user": user.as_dict()}
 
 
 # logout/delete session.
@@ -53,4 +54,4 @@ def signup():
 # @require_auth
 def logout():
     access_token = jwt.encode({"email": ""}, Configuration.SECRET_KEY)
-    return {"access_token": access_token.decode("UTF-8"), "user": ""}
+    return {"access_token": str(access_token), "user": ""}
