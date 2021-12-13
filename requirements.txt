@@ -17,7 +17,7 @@ click==7.1.2
 colorama==0.4.4
 
 faker==9.8.3
-jwt
+flask-jwt
 flask-cors==3.0.8
 flask-jwt-extended==3.24.1
 
